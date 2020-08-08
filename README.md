@@ -2,6 +2,12 @@
 
 This extension is under construction. Auto F&U automatically folds and unfolds when the cursor enters or leaves the function.
 
+## How to install
+
+```
+code --install-extension levipires.auto-fold-unfold
+```
+
 ## How to use
 
 It's simple! You just need to place the cursor inside a function for it to open. And guess what happens if you leave the function!? Exactly!
@@ -15,12 +21,18 @@ This extension doesn't have any requirement. But in future releases, IntelliSens
 
 ## Limitations
 
+* This is a under construction version. Please log any issues you find on [GitHub](https://github.com/levi-pires/auto-fold-unfold/issues).
+
 * Due to bugs, the support for comment blocks was disabled.
 
 * Support for tag hasn't been added yet.
 
 * VS Code only executes the unfold command when the cursor is in the blue zone. I'm working on it so please don't open an issue to talk about it.
 
-## In case you find a bug
+## How to find me
 
-If you run into any problem, tell me on [Github](https://github.com/levi-pires/auto-fold-unfold/issues)
+* [Email](mailto:waltvy.comercial@gmail.com)
+
+* [LinkedIn](https://www.linkedin.com/in/levi-pires-5a74331a6)
+
+* [GitHub](https://www.github.com/levi-pires)
