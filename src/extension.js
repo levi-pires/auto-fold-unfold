@@ -9,8 +9,6 @@ const { Scanner } = require('./scanner');
 function activate(context) {
 
     context.subscriptions.push(
-        vscode.window.onDidChangeActiveTextEditor(() => (vscode.window.activeTextEditor) ? vscode.commands.executeCommand('editor.foldAll') : {}),
-        vscode.window.onDidChangeVisibleTextEditors(() => (vscode.window.activeTextEditor) ? vscode.commands.executeCommand('editor.foldAll') : {}),
         vscode.window.onDidChangeTextEditorSelection(() => handle())
     );
 

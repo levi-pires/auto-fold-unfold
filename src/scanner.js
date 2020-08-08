@@ -23,9 +23,10 @@ function isClosing(arg, previous) {
  * @param {string[]} previous 
  */
 function isOpening(arg, previous) {
-    if ((arg === '*' && previous.includes('/')) || (arg === '*' && (previous.includes('/') && previous.includes('*')))) {
+    //Sessão defeituosa
+    /*if ((arg === '*' && previous.includes('/')) || (arg === '*' && (previous.includes('/') && previous.includes('*')))) {
         return true;
-    }
+    }*/
 
     if (arg === '{') {
         return true;
