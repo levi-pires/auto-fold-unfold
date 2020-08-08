@@ -31,7 +31,7 @@ This extension doesn't have any requirement. But in future releases, IntelliSens
 
 ## How to find me
 
-* [Email](mailto:waltvy.comercial@gmail.com)
+* Email: waltvy.comercial@gmail.com
 
 * [LinkedIn](https://www.linkedin.com/in/levi-pires-5a74331a6)
 
