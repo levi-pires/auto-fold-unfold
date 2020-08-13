@@ -8,6 +8,8 @@ This extension is under construction. Auto F&U automatically folds and unfolds w
 code --install-extension levipires.auto-fold-unfold
 ```
 
+or download it from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=levipires.auto-fold-unfold#overview).
+
 ## How to use
 
 It's simple! You just need to place the cursor inside a function for it to open. And guess what happens if you leave the function!? Exactly!
