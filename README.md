@@ -19,7 +19,7 @@ It magically closes and puts miles of code under one line. It's a piece of cake.
 
 ## Release Notes
 
-The 0.3.0 version of the extension contains the following improvements:
+The 0.3.x version of the extension contains the following improvements:
 
 * Settings were added to increase user control over the extension.
 
@@ -47,7 +47,7 @@ This extension doesn't have any requirement. But in future releases, IntelliSens
 
 * This is a under construction version. Please log any issues you find on [GitHub](https://github.com/levi-pires/auto-fold-unfold/issues).
 
-* Support for tag hasn't been added yet.
+* Support for tag and markdown hasn't been added yet.
 
 * VS Code only executes the unfold command when the cursor is in the blue zone. I'm working on it so please don't open an issue to talk about it.
 

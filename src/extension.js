@@ -27,7 +27,11 @@ function activate(context) {
                 );
             }
         }),
-        vscode.window.onDidChangeTextEditorSelection(() => handle())
+        vscode.window.onDidChangeTextEditorSelection(event => {
+            if (!unsupported.includes(event.textEditor.document.languageId)) {
+                handle();
+            }
+        })
     );
 
 }
