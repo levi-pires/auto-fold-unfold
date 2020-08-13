@@ -1,3 +1,5 @@
+const ResponseHandler = require("./response");
+
 /**
  * 
  * @param {string} arg 
@@ -23,10 +25,9 @@ function isClosing(arg, previous) {
  * @param {string[]} previous 
  */
 function isOpening(arg, previous) {
-    //Sessão defeituosa
-    /*if ((arg === '*' && previous.includes('/')) || (arg === '*' && (previous.includes('/') && previous.includes('*')))) {
+    if ((arg === '*' && previous.includes('/')) || (arg === '*' && (previous.includes('/') && previous.includes('*')))) {
         return true;
-    }*/
+    }
 
     if (arg === '{') {
         return true;
@@ -40,9 +41,9 @@ function isOpening(arg, previous) {
  * @param {number} line 
  * @param {number} char
  * @param {import("vscode").TextDocument} document 
- * @returns {{response: string, level?: number, stoped?: boolean}}
+ * @param {boolean} isComment
  */
-function scanAfter(line, char, document) {
+function scanAfter(line, char, document, isComment) {
     let levels = 0;
 
     while (line < document.lineCount) {
@@ -50,7 +51,7 @@ function scanAfter(line, char, document) {
 
         for (char; char < content.length; ++char) {
             if (isOpening(content[char], [])) {
-                return { response: 'closing', level: levels, stoped: true };
+                return ResponseHandler.handle(true, (isComment) ? ++levels : levels, 'closing');
             }
 
             if (isClosing(content[char], '').is) {
@@ -62,46 +63,49 @@ function scanAfter(line, char, document) {
         char = 0;
     }
 
-    return { response: 'closing', level: levels };
+    if (isComment) ++levels;
+    return ResponseHandler.handle(false, levels, 'closing');
 }
 
 class Scanner {
     /**
-     * @param {number} lineNumber 
-     * @param {number} charNumber
+     * @param {number} line 
+     * @param {number} char
      * @param {import("vscode").TextDocument} document 
-     * @returns {{response: string, level?: number, stoped?: boolean}}
+     * @returns {Thenable<any>[]}
      */
-    static scan(lineNumber, charNumber, document) {
-        let lineContent = document.lineAt(lineNumber).text;
-        --charNumber;
-        for (charNumber; charNumber > -1; --charNumber) {
-            let boo = isClosing(lineContent[charNumber], (charNumber !== 0) ? lineContent[charNumber - 1] : '');
-            if (boo.is) {
-                if (boo.isComment) {
-                    return { response: 'closing-c' };
-                }
+    static scan(line, char, document) {
+        let content = document.lineAt(line).text;
 
-                return scanAfter(lineNumber, charNumber, document);
+        --char;
+
+        for (char; char > -1; --char) {
+            let close = isClosing(content[char], (char !== 0) ? content[char - 1] : '');
+            if (close.is) {
+                return scanAfter(line, char, document, close.isComment);
             }
 
             let i = [];
-            if (charNumber !== 0) i.push(lineContent[charNumber - 1]);
-            if (charNumber >= 2) i.push(lineContent[charNumber - 2]);
+            if (char !== 0) i.push(content[char - 1]);
+            if (char >= 2) i.push(content[char - 2]);
 
-            if (isOpening(lineContent[charNumber], i)) {
-                return { response: 'opening' };
+            if (isOpening(content[char], i)) {
+                return ResponseHandler.handle(false, 0, 'opening');
             }
         }
 
-        --lineNumber;
-        lineContent = document.lineAt(lineNumber).text;
-        charNumber = lineContent.length;
-        if (lineNumber === -1) {
-            return;
+        --line;
+
+        content = document.lineAt(line).text;
+
+        char = content.length;
+
+        if (line === -1) {
+            return ResponseHandler.handle(false, 0, undefined);
         }
-        return this.scan(lineNumber, charNumber, document);
+
+        return this.scan(line, char, document);
     }
 }
 
-exports.Scanner = Scanner;
+module.exports = Scanner;

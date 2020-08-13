@@ -4,7 +4,7 @@ This extension is under construction. Auto F&U automatically folds and unfolds w
 
 ## How to install
 
-```
+```bash
 code --install-extension levipires.auto-fold-unfold
 ```
 
@@ -15,6 +15,28 @@ It magically closes and puts miles of code under one line. It's a piece of cake.
 
 ![AU Demo](https://raw.githubusercontent.com/levi-pires/auto-fold-unfold/master/images/demo.gif)
 
+## Release Notes
+
+The 0.3.0 version of the extension contains the following improvements:
+
+* Settings were added to increase user control over the extension.
+
+* The bug in comment blocks was resolved and the support to it was reactivated.
+
+* Now the unsupported languages `xml, html and markdown` are truly unsupported, wich means it won't fold the code in languages that are not supported - in case you set `auto-fold-unfold.onDidChangeActiveEditor` or `auto-fold-unfold.onSaved` to `true`.
+
+## Settings
+
+```jsonc
+{
+    //Folds all whenever a file is opened or the active editor changes. This option might reduce productivity.
+    "auto-fold-unfold.onDidChangeActiveTextEditor": /*default is false*/,
+
+    //Folds all when the document is saved. For the sake of data integrity the editor might save without firing this event.
+    "auto-fold-unfold.onSaved": /*default is false*/
+}
+```
+
 ## Requirements
 
 This extension doesn't have any requirement. But in future releases, IntelliSense will be required.
@@ -22,8 +44,6 @@ This extension doesn't have any requirement. But in future releases, IntelliSens
 ## Limitations
 
 * This is a under construction version. Please log any issues you find on [GitHub](https://github.com/levi-pires/auto-fold-unfold/issues).
-
-* Due to bugs, the support for comment blocks was disabled.
 
 * Support for tag hasn't been added yet.
 
