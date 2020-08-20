@@ -4,7 +4,7 @@
     "description": "Auto fold and unfold to visually manage the code size.",
     "publisher": "levipires",
     "license": "MIT",
-    "version": "0.3.1",
+    "version": "0.4.0",
     "preview": true,
     "engines": {
         "vscode": "^1.48.0"
@@ -19,6 +19,12 @@
         "configuration": {
             "title": "AFU",
             "properties": {
+                "auto-fold-unfold.onEdit": {
+                    "scope": "resource",
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Folds or unfolds while you are coding"
+                },
                 "auto-fold-unfold.onDidChangeActiveTextEditor": {
                     "scope": "resource",
                     "type": "boolean",
@@ -30,6 +36,12 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Folds all when the document is saved. For the sake of data integrity the editor might save without firing this event."
+                },
+                "auto-fold-unfold.debug": {
+                    "scope": "resource",
+                    "type": "boolean",
+                    "default": false,
+                    "description": "This setting is used during development testing of this extension. Change it will not affect your life at all"
                 }
             }
         }
@@ -38,7 +50,7 @@
     "icon": "images/afu.png",
     "galleryBanner": {
         "theme": "dark",
-        "color": "#396dbc"
+        "color": "#19355e"
     },
     "repository": {
         "url": "https://github.com/levi-pires/auto-fold-unfold",
@@ -64,5 +76,8 @@
         "vsce": "^1.78.0",
         "vscode-test": "^1.3.0"
     },
-    "dependencies": {}
+    "dependencies": {},
+    "keywords": [
+        "auto", "fold", "code", "prettier", "extension", "visualization"
+    ]
 }
