@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.4.x
+
+* `auto-fold-unfold.onEdit` was added.
+* The code was improved and now behaves smarter when there are square brackets.
+* The code is now documented for those interested. You can go to the [master branch](https://github.com/levi-pires/auto-fold-unfold/tree/master/src) to see it.
+* I received divine illumination and now we have support for all languages!
+
 ## 0.3.x
 
 The 0.3.x version of the extension contains the following improvements:

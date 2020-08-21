@@ -21,23 +21,27 @@ And now, if you are using version 0.4.0 or higher, you can use this same magic w
 
 ## Release Notes
 
-The 0.4.x version of the extension contains the following improvements:
+The 0.5.x version of the extension contains the following improvements:
 
-* `auto-fold-unfold.onEdit` was added.
-* The code was improved and now behaves smarter when there are square brackets.
-* The code is now documented for those interested. You can go to the [master branch](https://github.com/levi-pires/auto-fold-unfold/tree/master/src) to see it.
-* I received divine illumination and now we have support for all languages!
+* `auto-fold-unfold.behaviorOnEdit` was added.
 
 ## Settings
 
 ```jsonc
 {
-    /*
+    /**
     * These settings can be configured in the user, remote, workspace or folder settings.
     */
 
     //Folds or unfolds while you are coding
     "auto-fold-unfold.onEdit": /*default is true*/,
+
+    /**
+    * Defines fold and unfold while editing behavior.
+    * If "parent", only the block where the cursor is will be unfolded.
+    * If "family", the block where the cursor is and it's children will be unfolded.
+    */
+    "auto-fold-unfold.behaviorOnEdit": /*default is "parent"*/,
 
     /**
     * Folds all whenever a file is opened or the active editor changes.

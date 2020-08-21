@@ -1,7 +1,8 @@
 /**<,m */
+
 const { workspace, window } = require('vscode');
 const Scanner = require('./scanner');
-const { foldAll } = require('./consts');
+const { foldAll, timer } = require('./consts');
 
 /**
  * @param {import('vscode').ExtensionContext} context
@@ -38,19 +39,10 @@ function handle() {
         return;
     }
 
-    if (workspace.getConfiguration('auto-fold-unfold').get('debug')) {
-        Scanner.scan().forEach((item, index, array) => {
-            if (typeof item == 'object') {
-                console.time(`\nHow long the scanner "${array[index - 1]}" take to do it's job`);
-                item.then(
-                    () => console.timeEnd(`\nHow long the scanner "${array[index - 1]}" take to do it's job`),
-                    reason => console.warn(reason)
-                );
-            }
-        });
-    } else {
-        Scanner.scan();
-    }
+    timer(
+        Scanner.scan(workspace.getConfiguration('auto-fold-unfold').get('behaviorOnEdit') || "parent"),
+        workspace.getConfiguration('auto-fold-unfold').get('debug') || false
+    );
 }
 
 exports.activate = activate;

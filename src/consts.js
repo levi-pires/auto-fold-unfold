@@ -14,4 +14,23 @@ const foldAll = () => {
     );
 };
 
-module.exports = { foldAll };
+/**
+ * For debug purpose
+ * @param {any[]} array 
+ * @param {boolean} debug 
+ */
+const timer = (array, debug) => {
+    if (debug) {
+        array.forEach((item, index) => {
+            if (typeof item == 'object') {
+                console.time(`How long the scanner "${array[index - 1]}" take to do it's job`);
+                item.then(
+                    () => console.timeEnd(`How long the scanner "${array[index - 1]}" take to do it's job`),
+                    reason => console.warn(reason)
+                );
+            }
+        });
+    }
+};
+
+module.exports = { foldAll, timer };

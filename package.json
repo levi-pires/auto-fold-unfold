@@ -4,7 +4,7 @@
     "description": "Auto fold and unfold to visually manage the code size.",
     "publisher": "levipires",
     "license": "MIT",
-    "version": "0.4.1",
+    "version": "0.5.0",
     "preview": true,
     "engines": {
         "vscode": "^1.48.0"
@@ -24,6 +24,18 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Folds or unfolds while you are coding"
+                },
+                "auto-fold-unfold.behaviorOnEdit": {
+                    "scope": "resource",
+                    "type": "string",
+                    "default": "parent",
+                    "enum": ["family", "parent"],
+                    "enumDescriptions": [
+                        "the block where the cursor is and it's children will be unfolded",
+                        "only the block where the cursor is will be unfolded"
+                    ],
+                    "description": "Defines fold and unfold while editing behavior",
+                    "anyOf": ["family", "parent"]
                 },
                 "auto-fold-unfold.onDidChangeActiveTextEditor": {
                     "scope": "resource",
@@ -78,6 +90,6 @@
     },
     "dependencies": {},
     "keywords": [
-        "auto", "fold", "code", "prettier", "extension", "visualization"
+        "auto", "fold", "unfold", "code", "prettier", "extension", "visualization"
     ]
 }

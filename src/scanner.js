@@ -5,17 +5,19 @@ const { commands } = require('vscode');
  */
 class Scanner {
     /**
+     * @param {string} scope
      * @returns {(string | Thenable<any>)[]} An array containing a key that represents the Thenable
      * and the Thenable itself. The `array.length` will always be equal to or greater than 1
      */
-    static scan() {
+    static scan(scope) {
         let i_level = 7;
         let res = [];
         for (let level = 1; level < 8; ++level) {
             res.push(`fold${i_level}`, commands.executeCommand(`editor.foldLevel${i_level}`));
             --i_level;
         }
-        res.push('unfold', commands.executeCommand('editor.unfold'));
+        if (scope === "family") res.push('foldRec', commands.executeCommand('editor.unfoldRecursively'));
+        if (scope === "parent") res.push('unfold', commands.executeCommand('editor.unfold'));
         return res;
     }
 }
