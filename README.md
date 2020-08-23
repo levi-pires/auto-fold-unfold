@@ -24,6 +24,7 @@ And now, if you are using version 0.4.0 or higher, you can use this same magic w
 The 0.5.x version of the extension contains the following improvements:
 
 * `auto-fold-unfold.behaviorOnEdit` was added.
+* `auto-fold-unfold.foldAndClose` was added to compensate for the unwanted behavior of `auto-fold-unfold.onDidChangeActiveTextEditor`.
 
 ## Settings
 
@@ -33,7 +34,9 @@ The 0.5.x version of the extension contains the following improvements:
     * These settings can be configured in the user, remote, workspace or folder settings.
     */
 
-    //Folds or unfolds while you are coding
+    /**
+    * Folds or unfolds while you are coding.
+    */
     "auto-fold-unfold.onEdit": /*default is true*/,
 
     /**
@@ -56,6 +59,12 @@ The 0.5.x version of the extension contains the following improvements:
     "auto-fold-unfold.onSaved": /*default is false*/
 }
 ```
+
+## Commands
+
+Command | Keybinding | Description
+--------|------------|------------
+auto-fold-unfold.foldAndClose | ctrl+f ctrl+w | Folds the code and closes the editor. This command is an alternative to `auto-fold-unfold.onDidChangeActiveTextEditor`.
 
 ## Requirements
 

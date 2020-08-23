@@ -2,35 +2,38 @@
  * This module will only be used to store immutable values and simple functions
  */
 
-const { commands } = require("vscode");
+const { commands, workspace } = require("vscode");
 
-/**
- * This is a simple function. It should only be used in simple situations
- */
-const foldAll = () => {
-    commands.executeCommand('editor.foldAll').then(
-        () => {},
-        reason => console.error(reason)
-    );
-};
+class Consts {
+    /**
+     * This is a simple function. It should only be used in simple situations
+     */
+    static fold(closed = false) {
+        let config = workspace.getConfiguration('auto-fold-unfold').get('onEdit');
 
-/**
- * For debug purpose
- * @param {any[]} array 
- * @param {boolean} debug 
- */
-const timer = (array, debug) => {
-    if (debug) {
-        array.forEach((item, index) => {
-            if (typeof item == 'object') {
-                console.time(`How long the scanner "${array[index - 1]}" take to do it's job`);
-                item.then(
-                    () => console.timeEnd(`How long the scanner "${array[index - 1]}" take to do it's job`),
-                    reason => console.warn(reason)
-                );
-            }
-        });
+        let doFold = () => {
+            return commands.executeCommand('editor.foldAll').then(
+                () => {
+                    if (closed) {
+                        return commands.executeCommand('workbench.action.closeActiveEditor');
+                    }
+                },
+                reason => console.error(reason)
+            );
+        };
+
+        if (config) {
+            workspace.getConfiguration('auto-fold-unfold').update('onEdit', false, false).then(
+                () => doFold().then(
+                    () => workspace.getConfiguration('auto-fold-unfold').update('onEdit', true, false),
+                    reason => console.error(reason)
+                ),
+                reason => console.error(reason)
+            );
+        } else {
+            doFold();
+        }
     }
-};
+}
 
-module.exports = { foldAll, timer };
+module.exports = Consts;

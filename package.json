@@ -4,7 +4,7 @@
     "description": "Auto fold and unfold to visually manage the code size.",
     "publisher": "levipires",
     "license": "MIT",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "preview": true,
     "engines": {
         "vscode": "^1.48.0"
@@ -48,14 +48,16 @@
                     "type": "boolean",
                     "default": false,
                     "description": "Folds all when the document is saved. For the sake of data integrity the editor might save without firing this event."
-                },
-                "auto-fold-unfold.debug": {
-                    "scope": "resource",
-                    "type": "boolean",
-                    "default": false,
-                    "description": "This setting is used during development testing of this extension. Change it will not affect your life at all"
                 }
             }
+        },
+        "commands": {
+            "title": "Fold code and close the editor",
+            "command": "auto-fold-unfold.foldAndClose"
+        },
+        "keybindings": {
+            "command": "auto-fold-unfold.foldAndClose",
+            "key": "ctrl+f ctrl+w"
         }
     },
     "main": "./src/extension.js",

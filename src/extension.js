@@ -1,8 +1,8 @@
 /**<,m */
 
-const { workspace, window } = require('vscode');
+const { workspace, window, commands } = require('vscode');
 const Scanner = require('./scanner');
-const { foldAll, timer } = require('./consts');
+const Consts = require('./consts');
 
 /**
  * @param {import('vscode').ExtensionContext} context
@@ -12,16 +12,19 @@ function activate(context) {
     context.subscriptions.push(
         window.onDidChangeActiveTextEditor(() => {
             if (workspace.getConfiguration('auto-fold-unfold').get('onDidChangeActiveTextEditor') && window.activeTextEditor) {
-                foldAll();
+                Consts.fold();
             }
         }),
         workspace.onWillSaveTextDocument(() => {
             if (workspace.getConfiguration('auto-fold-unfold').get('onSaved')) {
-                foldAll();
+                Consts.fold();
             }
         }),
         window.onDidChangeTextEditorSelection(() => {
             handle();
+        }),
+        commands.registerTextEditorCommand('auto-fold-unfold.foldAndClose', () => {
+            Consts.fold(true);
         })
     );
 
@@ -39,10 +42,7 @@ function handle() {
         return;
     }
 
-    timer(
-        Scanner.scan(workspace.getConfiguration('auto-fold-unfold').get('behaviorOnEdit') || "parent"),
-        workspace.getConfiguration('auto-fold-unfold').get('debug') || false
-    );
+    Scanner.scan(workspace.getConfiguration('auto-fold-unfold').get('behaviorOnEdit') || "parent");
 }
 
 exports.activate = activate;
