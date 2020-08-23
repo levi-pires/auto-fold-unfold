@@ -20,7 +20,8 @@ function activate(context) {
                 Consts.fold();
             }
         }),
-        window.onDidChangeTextEditorSelection(() => {
+        window.onDidChangeTextEditorSelection(event => {
+            if (event.kind.valueOf() === 3) return;
             handle();
         }),
         commands.registerTextEditorCommand('auto-fold-unfold.foldAndClose', () => {
@@ -42,7 +43,7 @@ function handle() {
         return;
     }
 
-    Scanner.scan(workspace.getConfiguration('auto-fold-unfold').get('behaviorOnEdit') || "parent");
+    return Scanner.scan(workspace.getConfiguration('auto-fold-unfold').get('behaviorOnEdit') || "parent");
 }
 
 exports.activate = activate;

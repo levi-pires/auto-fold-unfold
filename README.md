@@ -25,6 +25,7 @@ The 0.5.x version of the extension contains the following improvements:
 
 * `auto-fold-unfold.behaviorOnEdit` was added.
 * `auto-fold-unfold.foldAndClose` was added to compensate for the unwanted behavior of `auto-fold-unfold.onDidChangeActiveTextEditor`.
+* The relationship between `auto-fold-unfold.onEdit` and the other features was improved, as well as it's own behavior.
 
 ## Settings
 
@@ -73,7 +74,6 @@ This extension doesn't have any requirement.
 ## Limitations
 
 * This is a under construction version. Please log any issues you find on [GitHub](https://github.com/levi-pires/auto-fold-unfold/issues).
-* VS Code only executes the unfold command when the cursor is in the blue zone. I'm working on it so please don't open an issue to talk about it.
 
 ## Did you like it?
 
