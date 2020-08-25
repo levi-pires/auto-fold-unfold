@@ -21,11 +21,10 @@ And now, if you are using version 0.4.0 or higher, you can use this same magic w
 
 ## Release Notes
 
-The 0.5.x version of the extension contains the following improvements:
+The 0.6.x version of the extension contains the following improvements:
 
-* `auto-fold-unfold.behaviorOnEdit` was added.
-* `auto-fold-unfold.foldAndClose` was added to compensate for the unwanted behavior of `auto-fold-unfold.onDidChangeActiveTextEditor`.
-* The relationship between `auto-fold-unfold.onEdit` and the other features was improved, as well as it's own behavior.
+* The code was refactored in order to keep it updated, clean and agile.
+* `auto-fold-unfold.modeOnEdit` was added.
 
 ## Settings
 
@@ -41,11 +40,22 @@ The 0.5.x version of the extension contains the following improvements:
     "auto-fold-unfold.onEdit": /*default is true*/,
 
     /**
-    * Defines fold and unfold while editing behavior.
+    * Defines fold and unfold behavior while editing.
     * If "parent", only the block where the cursor is will be unfolded.
     * If "family", the block where the cursor is and it's children will be unfolded.
     */
     "auto-fold-unfold.behaviorOnEdit": /*default is "parent"*/,
+
+    /**
+    * Defines the mode of fold and unfold while editing.
+    * If "fast", this extension will do it's job in milliseconds of milliseconds,
+    * but will be limited to the first 7 levels.
+    * If "best", performance will be dictated by the level you are entering
+    * and the power of your computer, but you will experience unlimited folding/unfolding.
+    * I advise you to use the "best" setting only if your code is a tangle of objects
+    * containing a 45 generation family.
+    */
+    "auto-fold-unfold.modeOnEdit": /*default is "fast"*/,
 
     /**
     * Folds all whenever a file is opened or the active editor changes.

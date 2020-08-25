@@ -4,7 +4,7 @@
     "description": "Auto fold and unfold to visually manage the code size.",
     "publisher": "levipires",
     "license": "MIT",
-    "version": "0.5.3",
+    "version": "0.6.0",
     "preview": true,
     "keywords": [
         "auto", "fold", "unfold", "code", "prettier", "extension", "visualization"
@@ -37,8 +37,20 @@
                         "the block where the cursor is and it's children will be unfolded",
                         "only the block where the cursor is will be unfolded"
                     ],
-                    "description": "Defines fold and unfold while editing behavior",
+                    "description": "Defines fold and unfold behavior while editing",
                     "anyOf": ["family", "parent"]
+                },
+                "auto-fold-unfold.modeOnEdit": {
+                    "scope": "resource",
+                    "type": "string",
+                    "default": "fast",
+                    "enum": ["fast", "best"],
+                    "enumDescriptions": [
+                        "has a limit of 7 levels",
+                        "doesn't have limits but is way slower"
+                    ],
+                    "description": "Defines the mode of fold and unfold while editing",
+                    "anyOf": ["fast", "best"]
                 },
                 "auto-fold-unfold.onDidChangeActiveTextEditor": {
                     "scope": "resource",
