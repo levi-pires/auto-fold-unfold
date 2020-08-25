@@ -4,8 +4,11 @@
     "description": "Auto fold and unfold to visually manage the code size.",
     "publisher": "levipires",
     "license": "MIT",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "preview": true,
+    "keywords": [
+        "auto", "fold", "unfold", "code", "prettier", "extension", "visualization"
+    ],
     "engines": {
         "vscode": "^1.48.0"
     },
@@ -17,7 +20,7 @@
     ],
     "contributes": {
         "configuration": {
-            "title": "AFU",
+            "title": "Auto Fold & Unfold",
             "properties": {
                 "auto-fold-unfold.onEdit": {
                     "scope": "resource",
@@ -51,14 +54,14 @@
                 }
             }
         },
-        "commands": {
+        "commands": [{
             "title": "Fold code and close the editor",
             "command": "auto-fold-unfold.foldAndClose"
-        },
-        "keybindings": {
+        }],
+        "keybindings": [{
             "command": "auto-fold-unfold.foldAndClose",
             "key": "ctrl+f ctrl+w"
-        }
+        }]
     },
     "main": "./src/extension.js",
     "icon": "images/afu.png",
@@ -90,8 +93,5 @@
         "vsce": "^1.78.0",
         "vscode-test": "^1.3.0"
     },
-    "dependencies": {},
-    "keywords": [
-        "auto", "fold", "unfold", "code", "prettier", "extension", "visualization"
-    ]
+    "dependencies": {}
 }

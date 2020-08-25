@@ -43,7 +43,13 @@ function handle() {
         return;
     }
 
-    return Scanner.scan(workspace.getConfiguration('auto-fold-unfold').get('behaviorOnEdit') || "parent");
+    let warn = () => {
+        window.showErrorMessage('auto-fold-unfold.behaviorOnEdit returned `undefined`.' +
+            ' This setting should never return this value');
+        return 'parent';
+    };
+
+    return Scanner.scan(workspace.getConfiguration('auto-fold-unfold').get('behaviorOnEdit') || warn());
 }
 
 exports.activate = activate;

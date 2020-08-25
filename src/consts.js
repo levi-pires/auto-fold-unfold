@@ -17,6 +17,10 @@ const Consts = {
             },
             reason => console.error(reason)
         );
+    },
+    scope: {
+        family: () => commands.executeCommand('editor.unfoldRecursively'),
+        parent: () => commands.executeCommand('editor.unfold')
     }
 };
 
