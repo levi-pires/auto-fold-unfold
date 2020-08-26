@@ -1,4 +1,37 @@
-const { commands, window, Range } = require("vscode");
+const { commands, window } = require("vscode");
+
+const scope = {
+    family: () => commands.executeCommand('editor.unfoldRecursively'),
+    parent: () => commands.executeCommand('editor.unfold')
+};
+
+const mode = {
+    /**
+     * @returns {Thenable<any>[]}
+     */
+    fast: (...args) => {
+        let array = [];
+        for (let level = 7; level > 0; --level) {
+            array.push(commands.executeCommand(`editor.foldLevel${level}`));
+        }
+        array.push(scope[ /**scopeId*/ args[0]]());
+        return array;
+    },
+    /**
+     * @param {string} scopeId
+     * @param {import('vscode').Selection} position
+     * @returns {Thenable<any>[]}
+     */
+    best: (scopeId, position) => [
+        commands.executeCommand('editor.foldAll').then(
+            () => {
+                window.activeTextEditor.selection = position;
+                return scope[scopeId]();
+            },
+            reason => reason
+        )
+    ]
+};
 
 module.exports = {
     /**
@@ -21,32 +54,6 @@ module.exports = {
      * @returns {any[]}
      */
     handle: (scopeId, modeId, position) => {
-        let scope = {
-            family: () => commands.executeCommand('editor.unfoldRecursively'),
-            parent: () => commands.executeCommand('editor.unfold')
-        };
-
-        let mode = {
-            fast: () => {
-                let array = [];
-                for (let level = 7; level > 0; --level) {
-                    array.push(commands.executeCommand(`editor.foldLevel${level}`));
-                }
-                array.push(scope[scopeId]());
-                return array;
-            },
-            best: () => {
-                return [commands.executeCommand('editor.foldAll').then(
-                    () => {
-                        window.activeTextEditor.selection = position;
-                        window.activeTextEditor.revealRange(new Range(position.start, position.end));
-                        return scope[scopeId]();
-                    },
-                    reason => reason
-                )];
-            }
-        };
-
-        return mode[modeId]();
+        return mode[modeId](scopeId, position);
     }
 };
