@@ -14,7 +14,7 @@ const fold = {
         for (let level = 7; level > 0; --level) {
             array.push(commands.executeCommand(`editor.foldLevel${level}`));
         }
-        array.push(unfold[ /**scopeId*/ args[0]]());
+        array.push(unfold[ /**unfoldModeId*/ args[0]]());
         return array;
     },
     /**
