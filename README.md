@@ -27,6 +27,7 @@ The 0.7.x version of the extension contains the following improvements:
 Please take a look at `auto-fold-unfold.onEditing`.
 * The way to store data during runtime was changed. `vscode.Memento` is now used.
 Take a look at [extension.js](https://github.com/levi-pires/auto-fold-unfold/tree/master/src)
+* A way to warn the user about important changes was added.
 
 ## Settings
 

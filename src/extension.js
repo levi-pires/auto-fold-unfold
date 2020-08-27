@@ -70,20 +70,26 @@ function activate(context) {
             return;
         }
 
-        if (!fs.existsSync(context.extensionPath + '/.updated')) window.showInformationMessage(
-            'The settings have changed.',
-            'goto settings',
-            "don't show again"
-        ).then(value => {
-            if (value == 'goto settings') {
-                fs.appendFileSync(context.extensionPath + '/.updated', '');
-                commands.executeCommand('workbench.action.openSettings', 'auto-fold-unfold');
-            }
+        let version = JSON.parse(fs.readFileSync(context.extensionPath + '/package.json').toString()).version;
+        if (!fs.existsSync(context.extensionPath + '/.update')) {
+            fs.appendFileSync(context.extensionPath + '/.update', '');
+        }
+        if (fs.readFileSync(context.extensionPath + '/.update').toString() != version) {
+            window.showInformationMessage(
+                'The settings have changed.',
+                'goto settings',
+                "don't show again"
+            ).then(value => {
+                if (value == 'goto settings') {
+                    fs.writeFileSync(context.extensionPath + '/.update', version);
+                    commands.executeCommand('workbench.action.openSettings', 'auto-fold-unfold');
+                }
 
-            if (value == "don't show again") {
-                fs.appendFileSync(context.extensionPath + '/.updated', '');
-            }
-        });
+                if (value == "don't show again") {
+                    fs.writeFileSync(context.extensionPath + '/.update', version);
+                }
+            });
+        }
 
         load.dispose();
         window.setStatusBarMessage('$(check) Auto Fold & Unfold: The settings were successfully loaded', 2500);
