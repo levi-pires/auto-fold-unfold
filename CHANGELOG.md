@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.6.x
+
+* The code was refactored in order to keep it updated, clean and agile.
+* `auto-fold-unfold.modeOnEdit` was added.
+
 ## 0.5.x
 
 * `auto-fold-unfold.behaviorOnEdit` was added.

@@ -7,3 +7,4 @@ dev
 yarn.lock
 .jshintrc
 .eslintrc.json
+.yarnclean

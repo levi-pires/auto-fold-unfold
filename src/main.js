@@ -1,11 +1,11 @@
 const { commands, window } = require("vscode");
 
-const scope = {
+const unfold = {
     family: () => commands.executeCommand('editor.unfoldRecursively'),
     parent: () => commands.executeCommand('editor.unfold')
 };
 
-const mode = {
+const fold = {
     /**
      * @returns {Thenable<any>[]}
      */
@@ -14,19 +14,19 @@ const mode = {
         for (let level = 7; level > 0; --level) {
             array.push(commands.executeCommand(`editor.foldLevel${level}`));
         }
-        array.push(scope[ /**scopeId*/ args[0]]());
+        array.push(unfold[ /**scopeId*/ args[0]]());
         return array;
     },
     /**
-     * @param {string} scopeId
-     * @param {import('vscode').Selection} position
+     * @param {string} unfoldModeId
+     * @param {import('vscode').Selection} selection
      * @returns {Thenable<any>[]}
      */
-    best: (scopeId, position) => [
+    best: (unfoldModeId, selection) => [
         commands.executeCommand('editor.foldAll').then(
             () => {
-                window.activeTextEditor.selection = position;
-                return scope[scopeId]();
+                window.activeTextEditor.selection = selection;
+                return unfold[unfoldModeId]();
             },
             reason => reason
         )
@@ -48,12 +48,12 @@ module.exports = {
         );
     },
     /**
-     * @param {string} scopeId must be `parent` or `family`
-     * @param {string} modeId must be `fast` or `best`
-     * @param {import('vscode').Selection} position the cursor position before changes
-     * @returns {any[]}
+     * @param {string} unfoldModeId must be `parent` or `family`
+     * @param {string} foldModeId must be `fast` or `best`
+     * @param {import('vscode').Selection} cursorSelection the cursor position before changes
+     * @returns {Thenable<any>[]}
      */
-    handle: (scopeId, modeId, position) => {
-        return mode[modeId](scopeId, position);
+    handle: (unfoldModeId, foldModeId, cursorSelection) => {
+        return fold[foldModeId](unfoldModeId, cursorSelection);
     }
 };

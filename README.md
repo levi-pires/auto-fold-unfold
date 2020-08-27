@@ -21,10 +21,10 @@ And now, if you are using version 0.4.0 or higher, you can use this same magic w
 
 ## Release Notes
 
-The 0.6.x version of the extension contains the following improvements:
+The 0.7.x version of the extension contains the following improvements:
 
-* The code was refactored in order to keep it updated, clean and agile.
-* `auto-fold-unfold.modeOnEdit` was added.
+* `auto-fold-unfold.onEdit`, `auto-fold-unfold.behaviorOnEdit` and `auto-fold-unfold.modeOnEdit` are deprecated.
+Please take a look at `auto-fold-unfold.onEditing`.
 
 ## Settings
 
@@ -32,42 +32,53 @@ The 0.6.x version of the extension contains the following improvements:
 {
     /**
     * These settings can be configured in the user, remote, workspace or folder settings.
+    *
+    * @deprecated
+    * auto-fold-unfold.onEdit
+    * auto-fold-unfold.behaviorOnEdit
+    * auto-fold-unfold.modeOnEdit
+    * @deprecated
     */
 
     /**
-    * Folds or unfolds while you are coding.
+    * Folding and unfolding while editing.
     */
-    "auto-fold-unfold.onEdit": /*default is true*/,
+    "auto-fold-unfold.onEditing": {
+        /**
+        * You can disable this feature in case you don't like it.
+        */
+        "enable": true,
 
-    /**
-    * Defines fold and unfold behavior while editing.
-    * If "parent", only the block where the cursor is will be unfolded.
-    * If "family", the block where the cursor is and it's children will be unfolded.
-    */
-    "auto-fold-unfold.behaviorOnEdit": /*default is "parent"*/,
+        /**
+        * Defines fold behavior while editing.
+        * If "fast", this extension will do it's job in milliseconds,
+        * but the folding will be limited to the first 7 levels.
+        * If "best", performance will be dictated by the level you are entering
+        * and the power of your computer, but you will experience unlimited folding.
+        * I advise you to use the "best" setting only if your code is a tangle of objects
+        * containing a 45 generation family.
+        */
+        "foldMode": "fast",
 
-    /**
-    * Defines the mode of fold and unfold while editing.
-    * If "fast", this extension will do it's job in milliseconds of milliseconds,
-    * but will be limited to the first 7 levels.
-    * If "best", performance will be dictated by the level you are entering
-    * and the power of your computer, but you will experience unlimited folding/unfolding.
-    * I advise you to use the "best" setting only if your code is a tangle of objects
-    * containing a 45 generation family.
-    */
-    "auto-fold-unfold.modeOnEdit": /*default is "fast"*/,
+        /**
+        * Defines unfold behavior while editing.
+        * If "parent", only the block where the cursor is will be unfolded.
+        * If "family", the block where the cursor is and it's children will be unfolded.
+        */
+        "unfoldMode": "parent"
+    },
 
     /**
     * Folds all whenever a file is opened or the active editor changes.
     * This option might reduce productivity.
     */
-    "auto-fold-unfold.onDidChangeActiveTextEditor": /*default is false*/,
+    "auto-fold-unfold.onDidChangeActiveTextEditor": false,
 
     /**
     * Folds all when the document is saved.
     * For the sake of data integrity the editor might save without firing this event.
     */
-    "auto-fold-unfold.onSaved": /*default is false*/
+    "auto-fold-unfold.onSaved": false
 }
 ```
 
@@ -83,11 +94,11 @@ This extension doesn't have any requirement.
 
 ## Limitations
 
-* This is a under construction version. Please log any issues you find on [GitHub](https://github.com/levi-pires/auto-fold-unfold/issues).
+This is a under construction version. Please log any issues you find on [GitHub](https://github.com/levi-pires/auto-fold-unfold/issues).
 
 ## Did you like it?
 
-So [give me five stars](https://marketplace.visualstudio.com/items?itemName=levipires.auto-fold-unfold#review-details)
+[Give me five stars](https://marketplace.visualstudio.com/items?itemName=levipires.auto-fold-unfold#review-details)
 
 ## How to find me
 

@@ -3,14 +3,45 @@
 const { workspace, window, commands } = require('vscode');
 const Main = require('./main');
 
-var onChange = workspace.getConfiguration('auto-fold-unfold').get('onDidChangeActiveTextEditor', false);
-var onSave = workspace.getConfiguration('auto-fold-unfold').get('onSaved', false);
-var onEdit = workspace.getConfiguration('auto-fold-unfold').get('onEdit', true);
+var onChange = false;
+var onSave = false;
+var onEdit = {
+    "enable": true,
+    "foldMode": "fast",
+    "unfoldMode": "parent"
+};
+
+function loadConfig() {
+    onEdit = workspace.getConfiguration('auto-fold-unfold').get('onEditing');
+    onSave = workspace.getConfiguration('auto-fold-unfold').get('onSaved');
+    onChange = workspace.getConfiguration('auto-fold-unfold').get('onDidChangeActiveTextEditor');
+    let warn = (item) => window.showWarningMessage(`${item} was not found.` +
+        ' Using default properties.'
+    );
+    if (onChange == undefined) {
+        warn('auto-fold-unfold.onDidChangeActiveTextEditor');
+        onChange = false;
+    }
+    if (onSave == undefined) {
+        warn('auto-fold-unfold.onSaved');
+        onSave = false;
+    }
+    if (!onEdit) {
+        warn('auto-fold-unfold.onEditing');
+        onEdit = {
+            "enable": true,
+            "foldMode": "fast",
+            "unfoldMode": "parent"
+        };
+    }
+}
 
 /**
  * @param {import('vscode').ExtensionContext} context
  */
 function activate(context) {
+
+    loadConfig();
 
     context.subscriptions.push(
         window.onDidChangeActiveTextEditor(() => {
@@ -25,15 +56,15 @@ function activate(context) {
         }),
         window.onDidChangeTextEditorSelection(event => {
             if (event.kind.valueOf() === 3 ||
-                !onEdit ||
+                !onEdit.enable ||
                 !window.activeTextEditor ||
                 window.activeTextEditor.selection.active.compareTo(window.activeTextEditor.selection.anchor) !== 0) {
                 return;
             }
 
             Main.handle(
-                workspace.getConfiguration('auto-fold-unfold').get('behaviorOnEdit', 'parent'),
-                workspace.getConfiguration('auto-fold-unfold').get('modeOnEdit', 'fast'),
+                onEdit.unfoldMode /**parent */ ,
+                onEdit.foldMode /**fast */ ,
                 event.textEditor.selection
             );
         }),
@@ -48,9 +79,7 @@ function activate(context) {
 
                 new Promise((resolve, reject) => {
                     try {
-                        onChange = workspace.getConfiguration('auto-fold-unfold').get('onDidChangeActiveTextEditor', false);
-                        onSave = workspace.getConfiguration('auto-fold-unfold').get('onSaved', false);
-                        onEdit = workspace.getConfiguration('auto-fold-unfold').get('onEdit', true);
+                        loadConfig();
                         resolve();
                     } catch (err) {
                         reject(err);
