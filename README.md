@@ -1,4 +1,4 @@
-# Auto Fold & Unfold for VS Code v0.7.1
+# Auto Fold & Unfold for VS Code v0.7.2
 
 This extension is under construction. Auto F&U automatically folds and unfolds when the cursor enters or leaves the function.
 

@@ -1,56 +1,8 @@
 /**<,m */
-
 const { workspace, window, commands } = require('vscode');
 const Main = require('./main');
-const fs = require('fs');
-
-/**
- * @param {import('vscode').Memento} memento
- */
-function loadConfig(memento) {
-    let warn = (item) => window.showWarningMessage(`${item} was not found.` +
-        ' Using default properties.'
-    );
-
-    return new Promise((resolve, reject) => {
-        memento.update('onEdit', workspace.getConfiguration('auto-fold-unfold').get('onEditing')).then(
-            () => {
-                if (!memento.get('onEdit')) {
-                    warn('auto-fold-unfold.onEditing');
-                    memento.update('onEdit', {
-                        "enable": true,
-                        "foldMode": "fast",
-                        "unfoldMode": "parent"
-                    });
-                }
-
-                memento.update('onSave', workspace.getConfiguration('auto-fold-unfold').get('onSaved')).then(
-                    () => {
-                        if (memento.get('onSave') == undefined) {
-                            warn('auto-fold-unfold.onSaved');
-                            memento.update('onSave', false);
-                        }
-
-                        memento.update('onChange', workspace.getConfiguration('auto-fold-unfold').get('onDidChangeActiveTextEditor'))
-                            .then(
-                                () => {
-                                    if (memento.get('onChange') == undefined) {
-                                        warn('auto-fold-unfold.onDidChangeActiveTextEditor');
-                                        memento.update('onChange', false);
-                                    }
-
-                                    resolve();
-                                },
-                                reason => reject(reason)
-                            );
-                    },
-                    reason => reject(reason)
-                );
-            },
-            reason => reject(reason)
-        );
-    });
-}
+const Update = require('./update');
+const ConfigLoader = require('./config-loader');
 
 /**
  * @param {import('vscode').ExtensionContext} context
@@ -58,90 +10,69 @@ function loadConfig(memento) {
 function activate(context) {
 
     let init = async() => {
-        let load = window.createStatusBarItem(require('vscode').StatusBarAlignment.Left);
-        load.text = '$(loading) Auto Fold & Unfold: loading settings';
-        load.show();
+        let load = window.setStatusBarMessage('$(loading) Auto Fold & Unfold: Activating extension');
 
         try {
-            await loadConfig(context.workspaceState);
+            await ConfigLoader.loadConfig(context.workspaceState);
         } catch (err) {
             load.dispose();
-            window.showErrorMessage(err + '\nThe extension could not be loaded.');
+            window.showErrorMessage('The extension could not be loaded.' + '\n' + err);
             return;
         }
 
-        let version = JSON.parse(fs.readFileSync(context.extensionPath + '/package.json').toString()).version;
-        if (!fs.existsSync(context.extensionPath + '/.update')) {
-            fs.appendFileSync(context.extensionPath + '/.update', '');
-        }
-        if (fs.readFileSync(context.extensionPath + '/.update').toString() != version) {
-            window.showInformationMessage(
-                'The settings have changed.',
-                'goto settings',
-                "don't show again"
-            ).then(value => {
-                if (value == 'goto settings') {
-                    fs.writeFileSync(context.extensionPath + '/.update', version);
-                    commands.executeCommand('workbench.action.openSettings', 'auto-fold-unfold');
-                }
-
-                if (value == "don't show again") {
-                    fs.writeFileSync(context.extensionPath + '/.update', version);
-                }
-            });
-        }
-
-        load.dispose();
-        window.setStatusBarMessage('$(check) Auto Fold & Unfold: The settings were successfully loaded', 2500);
+        Update.showUpdate(context.extensionPath, 'The settings scope have changed.', ['go to settings', "don't show again"], [
+            () => {
+                commands.executeCommand('workbench.action.openSettings', 'auto-fold-unfold');
+            },
+            () => {}
+        ]);
 
         context.subscriptions.push(
             window.onDidChangeActiveTextEditor(() => {
-                if (context.workspaceState.get('onChange') && window.activeTextEditor) {
+                if (context.workspaceState.get('auto-fold-unfold.onChange') && window.activeTextEditor) {
                     Main.fold();
                 }
             }),
             workspace.onWillSaveTextDocument(() => {
-                if (context.workspaceState.get('onSave')) {
+                if (context.workspaceState.get('auto-fold-unfold.onSaved')) {
                     Main.fold();
                 }
             }),
             window.onDidChangeTextEditorSelection(event => {
-                if (event.kind.valueOf() === 3 ||
-                    !context.workspaceState.get('onEdit').enable ||
+                if (event.kind.valueOf() == 3 ||
+                    !context.workspaceState.get('auto-fold-unfold.onEditing').enable ||
                     !window.activeTextEditor ||
                     window.activeTextEditor.selection.active.compareTo(window.activeTextEditor.selection.anchor) !== 0) {
                     return;
                 }
 
                 Main.handle(
-                    context.workspaceState.get('onEdit').unfoldMode /**parent or family*/ ,
-                    context.workspaceState.get('onEdit').foldMode /**fast or best*/ ,
+                    context.workspaceState.get('auto-fold-unfold.onEditing').unfoldMode /**parent or family*/ ,
+                    context.workspaceState.get('auto-fold-unfold.onEditing').foldMode /**fast or best*/ ,
                     event.textEditor.selection
                 );
             }),
             commands.registerTextEditorCommand('auto-fold-unfold.foldAndClose', () => {
                 Main.fold(true);
             }),
-            workspace.onDidChangeConfiguration(async(event) => {
+            workspace.onDidChangeConfiguration(async event => {
                 if (event.affectsConfiguration('auto-fold-unfold')) {
-                    let item = window.createStatusBarItem(require('vscode').StatusBarAlignment.Left);
-                    item.text = '$(loading) Auto Fold & Unfold: applying changes';
-                    item.show();
+                    let reload = window.setStatusBarMessage('$(loading) Auto Fold & Unfold: Applying changes');
 
                     try {
-                        await loadConfig(context.workspaceState);
+                        await ConfigLoader.loadConfig(context.workspaceState);
                         window.showInformationMessage('All changes have been successfully applied');
                     } catch (err) {
                         window.showErrorMessage(err);
                     }
 
-                    item.dispose();
+                    reload.dispose();
                 }
             })
         );
 
-        console.log('auto-fold-unfold is now active.');
-
+        load.dispose();
+        window.setStatusBarMessage('$(check) Auto Fold & Unfold: The extension is active', 5000);
     };
 
     init();
