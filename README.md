@@ -101,7 +101,7 @@ This is a under construction version. Please log any issues you find on [GitHub]
 
 ## Did you like it?
 
-[Give me five stars](https://marketplace.visualstudio.com/items?itemName=levipires.auto-fold-unfold#review-details)
+[Give me five stars](https://marketplace.visualstudio.com/items?itemName=levipires.auto-fold-unfold&ssr=false#review-details)
 
 ## How to find me
 
