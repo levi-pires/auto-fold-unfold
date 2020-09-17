@@ -1,4 +1,4 @@
-# Auto Fold & Unfold for VS Code v0.7.2
+# Auto Fold & Unfold for VS Code v0.7.3
 
 This extension is under construction. Auto F&U automatically folds and unfolds when the cursor enters or leaves the function.
 
@@ -23,73 +23,74 @@ And now, if you are using version 0.4.0 or higher, you can use this same magic w
 
 The 0.7.x version of the extension contains the following improvements:
 
-* `auto-fold-unfold.onEdit`, `auto-fold-unfold.behaviorOnEdit` and `auto-fold-unfold.modeOnEdit` are deprecated.
-Please take a look at `auto-fold-unfold.onEditing`.
-* The way to store data during runtime was changed. `vscode.Memento` is now used.
-Take a look at [extension.js](https://github.com/levi-pires/auto-fold-unfold/tree/master/src)
-* A way to warn the user about important changes was added.
+- `auto-fold-unfold.onEdit`, `auto-fold-unfold.behaviorOnEdit` and `auto-fold-unfold.modeOnEdit` are deprecated.
+  Please take a look at `auto-fold-unfold.onEditing`.
+- The way to store data during runtime was changed. `vscode.Memento` is now used.
+  Take a look at [extension.js](https://github.com/levi-pires/auto-fold-unfold/tree/master/src)
+- A way to warn the user about important changes was added.
+- The code was refactored.
 
 ## Settings
 
-```jsonc
+```javascript
 {
+  /**
+   * These settings can be configured in the user, remote, workspace or folder settings.
+   *
+   * @deprecated
+   * auto-fold-unfold.onEdit
+   * auto-fold-unfold.behaviorOnEdit
+   * auto-fold-unfold.modeOnEdit
+   * @deprecated
+   */
+
+  /**
+   * Folding and unfolding while editing.
+   */
+  "auto-fold-unfold.onEditing": {
     /**
-    * These settings can be configured in the user, remote, workspace or folder settings.
-    *
-    * @deprecated
-    * auto-fold-unfold.onEdit
-    * auto-fold-unfold.behaviorOnEdit
-    * auto-fold-unfold.modeOnEdit
-    * @deprecated
-    */
-
-    /**
-    * Folding and unfolding while editing.
-    */
-    "auto-fold-unfold.onEditing": {
-        /**
-        * You can disable this feature in case you don't like it.
-        */
-        "enable": true,
-
-        /**
-        * Defines fold behavior while editing.
-        * If "fast", this extension will do it's job in milliseconds,
-        * but the folding will be limited to the first 7 levels.
-        * If "best", performance will be dictated by the level you are entering
-        * and the power of your computer, but you will experience unlimited folding.
-        * I advise you to use the "best" setting only if your code is a tangle of objects
-        * containing a 45 generation family.
-        */
-        "foldMode": "fast",
-
-        /**
-        * Defines unfold behavior while editing.
-        * If "parent", only the block where the cursor is will be unfolded.
-        * If "family", the block where the cursor is and it's children will be unfolded.
-        */
-        "unfoldMode": "parent"
-    },
+     * You can disable this feature in case you don't like it.
+     */
+    "enable": true,
 
     /**
-    * Folds all whenever a file is opened or the active editor changes.
-    * This option might reduce productivity.
-    */
-    "auto-fold-unfold.onDidChangeActiveTextEditor": false,
+     * Defines fold behavior while editing.
+     * If "fast", this extension will do it's job in milliseconds,
+     * but the folding will be limited to the first 7 levels.
+     * If "best", performance will be dictated by the level you are entering
+     * and the power of your computer, but you will experience unlimited folding.
+     * I advise you to use the "best" setting only if your code is a tangle of objects
+     * containing a 45 generation family.
+     */
+    "foldMode": "fast",
 
     /**
-    * Folds all when the document is saved.
-    * For the sake of data integrity the editor might save without firing this event.
-    */
-    "auto-fold-unfold.onSaved": false
+     * Defines unfold behavior while editing.
+     * If "parent", only the block where the cursor is will be unfolded.
+     * If "family", the block where the cursor is and it's children will be unfolded.
+     */
+    "unfoldMode": "parent"
+  },
+
+  /**
+   * Folds all whenever a file is opened or the active editor changes.
+   * This option might reduce productivity.
+   */
+  "auto-fold-unfold.onDidChangeActiveTextEditor": false,
+
+  /**
+   * Folds all when the document is saved.
+   * For the sake of data integrity the editor might save without firing this event.
+   */
+  "auto-fold-unfold.onSaved": false
 }
 ```
 
 ## Commands
 
-Command | Keybinding | Description
---------|------------|------------
-auto-fold-unfold.foldAndClose | ctrl+f ctrl+w | Folds the code and closes the editor. This command is an alternative to `auto-fold-unfold.onDidChangeActiveTextEditor`.
+| Command                       | Keybinding    | Description                                                                                                             |
+| ----------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| auto-fold-unfold.foldAndClose | ctrl+f ctrl+w | Folds the code and closes the editor. This command is an alternative to `auto-fold-unfold.onDidChangeActiveTextEditor`. |
 
 ## Requirements
 
@@ -105,8 +106,8 @@ This is a under construction version. Please log any issues you find on [GitHub]
 
 ## How to find me
 
-* Email: waltvy.comercial@gmail.com
+- Email: waltvy.comercial@gmail.com
 
-* [LinkedIn](https://www.linkedin.com/in/levi-pires-5a74331a6)
+- [LinkedIn](https://www.linkedin.com/in/levi-pires-5a74331a6)
 
-* [GitHub](https://www.github.com/levi-pires)
+- [GitHub](https://www.github.com/levi-pires)

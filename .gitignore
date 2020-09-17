@@ -8,3 +8,7 @@ yarn.lock
 .jshintrc
 .eslintrc.json
 .yarnclean
+out
+.update
+yarn-error.log
+easy-markdown-it

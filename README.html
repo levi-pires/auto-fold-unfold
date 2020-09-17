@@ -1,0 +1,187 @@
+<!--Generated automatically by easy-markdown-it-->
+
+<head>
+  <style>
+    * {
+      font-size: 1rem;
+    }
+    body {
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 1.75rem;
+      border-bottom: 3px solid gray;
+    }
+    h2 {
+      font-size: 1.5rem;
+    }
+    th,
+    td {
+      padding: 5px 10px;
+    }
+    td {
+      border-top: 2px solid gray;
+    }
+    .hljs {
+      display: block;
+      overflow-x: auto;
+      padding: 0.5em;
+      color: #383a42;
+      background: #01071d;
+    }
+    .hljs-comment,
+    .hljs-quote {
+      color: #a0a1a7;
+      font-style: italic;
+    }
+    .hljs-doctag,
+    .hljs-formula,
+    .hljs-keyword {
+      color: #a626a4;
+    }
+    .hljs-deletion,
+    .hljs-name,
+    .hljs-section,
+    .hljs-selector-tag,
+    .hljs-subst {
+      color: #e45649;
+    }
+    .hljs-literal {
+      color: #0184bb;
+    }
+    .hljs-addition,
+    .hljs-attribute,
+    .hljs-meta-string,
+    .hljs-regexp,
+    .hljs-string {
+      color: #50a14f;
+    }
+    .hljs-built_in,
+    .hljs-class .hljs-title {
+      color: #c18401;
+    }
+    .hljs-attr,
+    .hljs-number,
+    .hljs-selector-attr,
+    .hljs-selector-class,
+    .hljs-selector-pseudo,
+    .hljs-template-variable,
+    .hljs-type,
+    .hljs-variable {
+      color: #986801;
+    }
+    .hljs-bullet,
+    .hljs-link,
+    .hljs-meta,
+    .hljs-selector-id,
+    .hljs-symbol,
+    .hljs-title {
+      color: #4078f2;
+    }
+    .hljs-emphasis {
+      font-style: italic;
+    }
+    .hljs-strong {
+      font-weight: 700;
+    }
+    .hljs-link {
+      text-decoration: underline;
+    }
+    /*# sourceMappingURL=index.css.map*/
+  </style>
+</head>
+
+<body>
+  <h1>Auto Fold &amp; Unfold for VS Code v0.7.3</h1>
+  <h2>Release Notes</h2>
+  <p>The 0.7.x version of the extension contains the following improvements:</p>
+  <ul>
+    <li>
+      <code>auto-fold-unfold.onEdit</code>,
+      <code>auto-fold-unfold.behaviorOnEdit</code> and
+      <code>auto-fold-unfold.modeOnEdit</code> are deprecated. Please take a
+      look at <code>auto-fold-unfold.onEditing</code>.
+    </li>
+    <li>
+      The way to store data during runtime was changed.
+      <code>vscode.Memento</code> is now used. Take a look at
+      <a href="https://github.com/levi-pires/auto-fold-unfold/tree/master/src"
+        >extension.js</a
+      >
+    </li>
+    <li>A way to warn the user about important changes was added.</li>
+    <li>The code was refactored.</li>
+  </ul>
+  <h2>Settings</h2>
+  <pre><code class="hljs">{
+  <span class="hljs-comment">/**
+   * These settings can be configured in the user, remote, workspace or folder settings.
+   *
+   * <span class="hljs-doctag">@deprecated</span>
+   * auto-fold-unfold.onEdit
+   * auto-fold-unfold.behaviorOnEdit
+   * auto-fold-unfold.modeOnEdit
+   * <span class="hljs-doctag">@deprecated</span>
+   */</span>
+
+  <span class="hljs-comment">/**
+   * Folding and unfolding while editing.
+   */</span>
+  <span class="hljs-string">"auto-fold-unfold.onEditing"</span>: {
+    <span class="hljs-comment">/**
+     * You can disable this feature in case you don't like it.
+     */</span>
+    <span class="hljs-string">"enable"</span>: <span class="hljs-literal">true</span>,
+
+    <span class="hljs-comment">/**
+     * Defines fold behavior while editing.
+     * If "fast", this extension will do it's job in milliseconds,
+     * but the folding will be limited to the first 7 levels.
+     * If "best", performance will be dictated by the level you are entering
+     * and the power of your computer, but you will experience unlimited folding.
+     * I advise you to use the "best" setting only if your code is a tangle of objects
+     * containing a 45 generation family.
+     */</span>
+    <span class="hljs-string">"foldMode"</span>: <span class="hljs-string">"fast"</span>,
+
+    <span class="hljs-comment">/**
+     * Defines unfold behavior while editing.
+     * If "parent", only the block where the cursor is will be unfolded.
+     * If "family", the block where the cursor is and it's children will be unfolded.
+     */</span>
+    <span class="hljs-string">"unfoldMode"</span>: <span class="hljs-string">"parent"</span>
+  },
+
+  <span class="hljs-comment">/**
+   * Folds all whenever a file is opened or the active editor changes.
+   * This option might reduce productivity.
+   */</span>
+  <span class="hljs-string">"auto-fold-unfold.onDidChangeActiveTextEditor"</span>: <span class="hljs-literal">false</span>,
+
+  <span class="hljs-comment">/**
+   * Folds all when the document is saved.
+   * For the sake of data integrity the editor might save without firing this event.
+   */</span>
+  <span class="hljs-string">"auto-fold-unfold.onSaved"</span>: <span class="hljs-literal">false</span>
+}</code></pre>
+  <h2>Commands</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>Keybinding</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>auto-fold-unfold.foldAndClose</td>
+        <td>ctrl+f ctrl+w</td>
+        <td>
+          Folds the code and closes the editor. This command is an alternative
+          to <code>auto-fold-unfold.onDidChangeActiveTextEditor</code>.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
