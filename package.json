@@ -4,7 +4,7 @@
   "description": "Auto fold and unfold to visually manage the code size.",
   "publisher": "levipires",
   "license": "MIT",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "keywords": [
     "auto",
     "fold",
@@ -94,12 +94,28 @@
       {
         "title": "Fold All And Close Editor",
         "command": "auto-fold-unfold.foldAndClose"
+      },
+      {
+        "title": "Pauses The onEditing Functionality",
+        "command": "auto-fold-unfold.pause"
+      },
+      {
+        "title": "Freezes The Folding Functionality While Editing",
+        "command": "auto-fold-unfold.freeze"
       }
     ],
     "keybindings": [
       {
         "command": "auto-fold-unfold.foldAndClose",
         "key": "ctrl+f ctrl+w"
+      },
+      {
+        "command": "auto-fold-unfold.pause",
+        "key": "ctrl+f ctrl+a"
+      },
+      {
+        "command": "auto-fold-unfold.freeze",
+        "key": "ctrl+f ctrl+f"
       }
     ]
   },

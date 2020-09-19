@@ -27,20 +27,18 @@ export async function activate(context: ExtensionContext) {
     context,
     "The extension was updated",
     ["Show Me", "Don't Show Again"],
-    [
-      () => {
-        window.createWebviewPanel("markdown.preview", "Auto Fold & Unfold", {
-          viewColumn: ViewColumn.One,
-          preserveFocus: true,
-        }).webview.html = readFileSync(
-          context.extensionPath + "/README.html"
-        ).toString();
-      },
-      () => {},
-    ]
+    [() => showReleaseNote(context.extensionPath), () => {}]
   );
 
   context.subscriptions.push(
+    commands.registerTextEditorCommand("auto-fold-unfold.pause", () => {
+      Main.pause();
+    }),
+
+    commands.registerTextEditorCommand("auto-fold-unfold.freeze", () => {
+      Main.freeze();
+    }),
+
     window.onDidChangeActiveTextEditor(() => {
       if (
         context.workspaceState.get("auto-fold-unfold.onChange") &&
@@ -113,3 +111,10 @@ export async function activate(context: ExtensionContext) {
 }
 
 export function deactivate() {}
+
+function showReleaseNote(extensionPath: string) {
+  window.createWebviewPanel("markdown.preview", "Auto Fold & Unfold", {
+    viewColumn: ViewColumn.One,
+    preserveFocus: true,
+  }).webview.html = readFileSync(extensionPath + "/README.html").toString();
+}

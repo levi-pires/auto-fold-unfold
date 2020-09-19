@@ -4,6 +4,7 @@ import {
   Range,
   Selection,
   TextEditorRevealType,
+  StatusBarAlignment,
 } from "vscode";
 
 function unfold(unfoldModeId: string) {
@@ -22,7 +23,27 @@ function unfold(unfoldModeId: string) {
   }
 }
 
-export default {
+const Main = {
+  /**
+   * @private
+   */
+  isPaused: false,
+
+  /**
+   * @private
+   */
+  isFrozen: false,
+
+  /**
+   * @private
+   */
+  pauseStatusBarItem: window.createStatusBarItem(StatusBarAlignment.Right, 0),
+
+  /**
+   * @private
+   */
+  freezeStatusBarItem: window.createStatusBarItem(StatusBarAlignment.Right, 0),
+
   fold: (close = false): Thenable<any> => {
     return commands.executeCommand("editor.foldAll").then(
       () => {
@@ -44,12 +65,16 @@ export default {
     foldModeId: string,
     cursorSelection: Selection
   ) => {
+    if (Main.isPaused) return;
+
     switch (foldModeId) {
       case "fast":
         let array = [];
 
-        for (let level = 7; level > 0; --level) {
-          array.push(commands.executeCommand(`editor.foldLevel${level}`));
+        if (!Main.isFrozen) {
+          for (let level = 7; level > 0; --level) {
+            array.push(commands.executeCommand(`editor.foldLevel${level}`));
+          }
         }
 
         array.push(unfold(unfoldModeId));
@@ -62,24 +87,58 @@ export default {
         return array;
 
       case "best":
-        return [
-          commands.executeCommand("editor.foldAll").then(() => {
-            window.activeTextEditor!.selection = cursorSelection;
+        if (!Main.isFrozen) {
+          return [
+            commands.executeCommand("editor.foldAll").then(() => {
+              window.activeTextEditor!.selection = cursorSelection;
 
-            window.activeTextEditor!.revealRange(
-              new Range(cursorSelection.start, cursorSelection.end),
-              TextEditorRevealType.InCenterIfOutsideViewport
-            );
+              window.activeTextEditor!.revealRange(
+                new Range(cursorSelection.start, cursorSelection.end),
+                TextEditorRevealType.InCenterIfOutsideViewport
+              );
 
-            return unfold(unfoldModeId);
-          }),
-        ];
+              return unfold(unfoldModeId);
+            }),
+          ];
+        } else {
+          return [unfold(unfoldModeId)];
+        }
 
       default:
         window.showErrorMessage(
-          `An error occured while handling. Key: ${unfoldModeId}`
+          `An error occured while handling. Key: ${foldModeId}`
         );
         break;
     }
   },
+
+  pause: () => {
+    if (Main.isPaused) {
+      Main.pauseStatusBarItem.hide();
+      Main.isPaused = false;
+    } else {
+      Main.pauseStatusBarItem.show();
+      Main.isPaused = true;
+    }
+  },
+
+  freeze: () => {
+    if (Main.isFrozen) {
+      Main.freezeStatusBarItem.hide();
+      Main.isFrozen = false;
+    } else {
+      Main.freezeStatusBarItem.show();
+      Main.isFrozen = true;
+    }
+  },
 };
+
+Main.pauseStatusBarItem.text = "Paused";
+Main.pauseStatusBarItem.tooltip = "Auto Fold & Unfold is paused";
+Main.pauseStatusBarItem.command = "auto-fold-unfold.pause";
+
+Main.freezeStatusBarItem.text = "Frozen";
+Main.freezeStatusBarItem.tooltip = "Auto Fold & Unfold is frozen";
+Main.freezeStatusBarItem.command = "auto-fold-unfold.freeze";
+
+export default Main;
