@@ -7,7 +7,7 @@ e.toHtmlFile(
   body{margin-bottom: 20px;}
   h1{font-size: 1.75rem; border-bottom: 3px solid gray}
   h2{font-size: 1.5rem;}
-  th,td{padding: 5px 10px; margin: 0;}
+  th,td{padding: 5px 10px;}
   td{border-top: 1px solid gray;}
   tr:nth-child(1) td{border-top: 2.5px solid gray;}
   ${require("fs")

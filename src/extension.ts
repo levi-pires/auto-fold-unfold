@@ -4,6 +4,7 @@ import {
   workspace,
   ExtensionContext,
   ViewColumn,
+  Uri,
 } from "vscode";
 import Main from "./main";
 import ConfigLoader from "./config-loader";
@@ -31,13 +32,27 @@ export async function activate(context: ExtensionContext) {
   );
 
   context.subscriptions.push(
-    commands.registerTextEditorCommand("auto-fold-unfold.pause", () => {
-      Main.pause();
-    }),
+    commands.registerTextEditorCommand(
+      "auto-fold-unfold.onEditing.togglePause",
+      () => {
+        Main.pause();
+      }
+    ),
 
-    commands.registerTextEditorCommand("auto-fold-unfold.freeze", () => {
-      Main.freeze();
-    }),
+    commands.registerTextEditorCommand(
+      "auto-fold-unfold.onEditing.toggleFreeze",
+      () => {
+        Main.freeze();
+      }
+    ),
+
+    commands.registerTextEditorCommand(
+      "auto-fold-unfold.onEditing.toggleBoth",
+      () => {
+        Main.freeze();
+        Main.pause();
+      }
+    ),
 
     window.onDidChangeActiveTextEditor(() => {
       if (
@@ -60,6 +75,7 @@ export async function activate(context: ExtensionContext) {
       ) as { enable: boolean; unfoldMode: string; foldMode: string };
 
       if (
+        Main.isPaused ||
         event.kind!.valueOf() == 3 ||
         !onEdit.enable ||
         !window.activeTextEditor ||
@@ -100,6 +116,20 @@ export async function activate(context: ExtensionContext) {
 
         reload.dispose();
       }
+    }),
+
+    window.onDidChangeVisibleTextEditors((editorsArray) => {
+      if (editorsArray.length == 0) {
+        Main.freezeStatusBarItem.hide();
+        Main.pauseStatusBarItem.hide();
+      } else {
+        if (Main.isFrozen) {
+          Main.freezeStatusBarItem.show();
+        }
+        if (Main.isPaused) {
+          Main.pauseStatusBarItem.show();
+        }
+      }
     })
   );
 
@@ -113,8 +143,14 @@ export async function activate(context: ExtensionContext) {
 export function deactivate() {}
 
 function showReleaseNote(extensionPath: string) {
-  window.createWebviewPanel("markdown.preview", "Auto Fold & Unfold", {
-    viewColumn: ViewColumn.One,
-    preserveFocus: true,
-  }).webview.html = readFileSync(extensionPath + "/README.html").toString();
+  const panel = window.createWebviewPanel(
+    "markdown.preview",
+    "Auto Fold & Unfold",
+    {
+      viewColumn: ViewColumn.One,
+      preserveFocus: true,
+    }
+  );
+  panel.iconPath = Uri.file(extensionPath + "/images/afu.png");
+  panel.webview.html = readFileSync(extensionPath + "/README.html").toString();
 }

@@ -1,4 +1,4 @@
-# Auto Fold & Unfold for VS Code v0.8.0
+# Auto Fold & Unfold for VS Code v0.8.1
 
 This extension is under construction. Auto F&U automatically folds and unfolds when the cursor enters or leaves the function.
 
@@ -23,7 +23,16 @@ And now, if you are using version 0.4.0 or higher, you can use this same magic w
 
 The 0.8.x version of the extension contains the following improvements:
 
-- `auto-fold-unfold.freeze` and `auto-fold-unfold.pause` was added. take a look at [Commands](#Commands)
+### 0.8.0
+
+- `auto-fold-unfold.freeze` and `auto-fold-unfold.pause` were added. Take a look at [Commands](#commands)
+- The keybindings to `auto-fold-unfold.freeze` and `auto-fold-unfold.pause` were changed. Take a look at [Commands](#commands)
+
+### 0.8.1
+
+- For more intuitiveness, the names of the commands were changed
+- `auto-fold-unfold.onEditing.toggleBoth` was added
+- Due to overlapping keybindings, the default keybindings were changed
 
 ## Settings
 
@@ -83,11 +92,12 @@ The 0.8.x version of the extension contains the following improvements:
 
 ## Commands
 
-| Command                       | Keybinding    | Description                                                                                                             |
-| ----------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| auto-fold-unfold.foldAndClose | ctrl+f ctrl+w | Folds the code and closes the editor. This command is an alternative to `auto-fold-unfold.onDidChangeActiveTextEditor`. |
-| auto-fold-unfold.freeze       | ctrl+f ctrl+f | Freezes the folding functionality while Editing                                                                         |
-| auto-fold-unfold.pause        | ctrl+f ctrl+a | Pauses the onEditing functionality                                                                                      |
+| Command                                 | Keybinding    | Description                                                                                                             |
+| --------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| auto-fold-unfold.foldAndClose           | ctrl+shift+/  | Folds the code and closes the editor. This command is an alternative to `auto-fold-unfold.onDidChangeActiveTextEditor`. |
+| auto-fold-unfold.onEditing.toggleFreeze | ctrl+; f      | Freezes the folding functionality while Editing                                                                         |
+| auto-fold-unfold.onEditing.togglePause  | ctrl+; p      | Pauses the folding functionality while editing                                                                          |
+| auto-fold-unfold.onEditing.toggleBoth   | ctrl+; ctrl+; | Freezes and pauses the folding functionality while editing                                                              |
 
 ## Requirements
 

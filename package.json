@@ -4,7 +4,7 @@
   "description": "Auto fold and unfold to visually manage the code size.",
   "publisher": "levipires",
   "license": "MIT",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "keywords": [
     "auto",
     "fold",
@@ -96,26 +96,34 @@
         "command": "auto-fold-unfold.foldAndClose"
       },
       {
-        "title": "Pauses The onEditing Functionality",
-        "command": "auto-fold-unfold.pause"
+        "title": "Pauses The Folding Functionality While Editing",
+        "command": "auto-fold-unfold.onEditing.togglePause"
       },
       {
         "title": "Freezes The Folding Functionality While Editing",
-        "command": "auto-fold-unfold.freeze"
+        "command": "auto-fold-unfold.onEditing.toggleFreeze"
+      },
+      {
+        "title": "Freezes And Pauses The Folding Functionality While Editing",
+        "command": "auto-fold-unfold.onEditing.toggleBoth"
       }
     ],
     "keybindings": [
       {
         "command": "auto-fold-unfold.foldAndClose",
-        "key": "ctrl+f ctrl+w"
+        "key": "ctrl+shift+/"
       },
       {
-        "command": "auto-fold-unfold.pause",
-        "key": "ctrl+f ctrl+a"
+        "command": "auto-fold-unfold.onEditing.togglePause",
+        "key": "ctrl+; p"
       },
       {
-        "command": "auto-fold-unfold.freeze",
-        "key": "ctrl+f ctrl+f"
+        "command": "auto-fold-unfold.onEditing.toggleFreeze",
+        "key": "ctrl+; f"
+      },
+      {
+        "command": "auto-fold-unfold.onEditing.toggleBoth",
+        "key": "ctrl+; ctrl+;"
       }
     ]
   },

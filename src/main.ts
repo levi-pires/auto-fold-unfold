@@ -24,24 +24,12 @@ function unfold(unfoldModeId: string) {
 }
 
 const Main = {
-  /**
-   * @private
-   */
   isPaused: false,
 
-  /**
-   * @private
-   */
   isFrozen: false,
 
-  /**
-   * @private
-   */
   pauseStatusBarItem: window.createStatusBarItem(StatusBarAlignment.Right, 0),
 
-  /**
-   * @private
-   */
   freezeStatusBarItem: window.createStatusBarItem(StatusBarAlignment.Right, 0),
 
   fold: (close = false): Thenable<any> => {
@@ -65,8 +53,6 @@ const Main = {
     foldModeId: string,
     cursorSelection: Selection
   ) => {
-    if (Main.isPaused) return;
-
     switch (foldModeId) {
       case "fast":
         let array = [];
@@ -115,21 +101,20 @@ const Main = {
   pause: () => {
     if (Main.isPaused) {
       Main.pauseStatusBarItem.hide();
-      Main.isPaused = false;
     } else {
       Main.pauseStatusBarItem.show();
-      Main.isPaused = true;
     }
+    Main.isPaused = !Main.isPaused;
   },
 
   freeze: () => {
     if (Main.isFrozen) {
       Main.freezeStatusBarItem.hide();
-      Main.isFrozen = false;
     } else {
       Main.freezeStatusBarItem.show();
-      Main.isFrozen = true;
     }
+
+    Main.isFrozen = !Main.isFrozen;
   },
 };
 

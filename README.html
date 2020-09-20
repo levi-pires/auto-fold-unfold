@@ -18,7 +18,6 @@
     th,
     td {
       padding: 5px 10px;
-      margin: 0;
     }
     td {
       border-top: 1px solid gray;
@@ -96,17 +95,33 @@
 </head>
 
 <body>
-  <h1>Auto Fold &amp; Unfold for VS Code v0.8.0</h1>
-  <h2>Release Notes</h2>
+  <h1 id="auto-fold-%26-unfold-for-vs-code-v0.8.1">
+    Auto Fold &amp; Unfold for VS Code v0.8.1
+  </h1>
+  <h2 id="release-notes">Release Notes</h2>
   <p>The 0.8.x version of the extension contains the following improvements:</p>
+  <h3 id="0.8.0">0.8.0</h3>
   <ul>
     <li>
       <code>auto-fold-unfold.freeze</code> and
-      <code>auto-fold-unfold.pause</code> was added. take a look at
-      <a href="#Commands">Commands</a>
+      <code>auto-fold-unfold.pause</code> were added. Take a look at
+      <a href="#commands">Commands</a>
+    </li>
+    <li>
+      The keybindings to <code>auto-fold-unfold.freeze</code> and
+      <code>auto-fold-unfold.pause</code> were changed. Take a look at
+      <a href="#commands">Commands</a>
     </li>
   </ul>
-  <h2>Settings</h2>
+  <h3 id="0.8.1">0.8.1</h3>
+  <ul>
+    <li>For more intuitiveness, the names of the commands were changed</li>
+    <li><code>auto-fold-unfold.onEditing.toggleBoth</code> was added</li>
+    <li>
+      Due to overlapping keybindings, the default keybindings were changed
+    </li>
+  </ul>
+  <h2 id="settings">Settings</h2>
   <pre><code class="hljs">{
   <span class="hljs-comment">/**
    * These settings can be configured in the user, remote, workspace or folder settings.
@@ -158,7 +173,7 @@
    */</span>
   <span class="hljs-string">"auto-fold-unfold.onSaved"</span>: <span class="hljs-literal">false</span>
 }</code></pre>
-  <h2 id="Commands">Commands</h2>
+  <h2 id="commands">Commands</h2>
   <table>
     <thead>
       <tr>
@@ -170,21 +185,26 @@
     <tbody>
       <tr>
         <td>auto-fold-unfold.foldAndClose</td>
-        <td>ctrl+f ctrl+w</td>
+        <td>ctrl+shift+/</td>
         <td>
           Folds the code and closes the editor. This command is an alternative
           to <code>auto-fold-unfold.onDidChangeActiveTextEditor</code>.
         </td>
       </tr>
       <tr>
-        <td>auto-fold-unfold.freeze</td>
-        <td>ctrl+f ctrl+f</td>
-        <td>Freezes the folding functionality while Editing</td>
+        <td>auto-fold-unfold.onEditing.toggleFreeze</td>
+        <td>ctrl+; f</td>
+        <td>Freezes the folding functionality while editing</td>
       </tr>
       <tr>
-        <td>auto-fold-unfold.pause</td>
-        <td>ctrl+f ctrl+a</td>
-        <td>Pauses the onEditing functionality</td>
+        <td>auto-fold-unfold.onEditing.togglePause</td>
+        <td>ctrl+; p</td>
+        <td>Pauses the folding functionality while editing</td>
+      </tr>
+      <tr>
+        <td>auto-fold-unfold.onEditing.toggleBoth</td>
+        <td>ctrl+; ctrl+;</td>
+        <td>Freezes and pauses the folding functionality while editing</td>
       </tr>
     </tbody>
   </table>
