@@ -1,4 +1,4 @@
-# Auto Fold & Unfold for VS Code v0.8.1
+# Auto Fold & Unfold for VS Code v0.8.2
 
 This extension is under construction. Auto F&U automatically folds and unfolds when the cursor enters or leaves the function.
 
@@ -21,18 +21,11 @@ And now, if you are using version 0.4.0 or higher, you can use this same magic w
 
 ## Release Notes
 
-The 0.8.x version of the extension contains the following improvements:
+The version 0.8.2 of the extension contains the following improvements:
 
-### 0.8.0
+- Bug fix
 
-- `auto-fold-unfold.freeze` and `auto-fold-unfold.pause` were added. Take a look at [Commands](#commands)
-- The keybindings to `auto-fold-unfold.freeze` and `auto-fold-unfold.pause` were changed. Take a look at [Commands](#commands)
-
-### 0.8.1
-
-- For more intuitiveness, the names of the commands were changed
-- `auto-fold-unfold.onEditing.toggleBoth` was added
-- Due to overlapping keybindings, the default keybindings were changed
+-> See [Changelog](./CHANGELOG.md)
 
 ## Settings
 

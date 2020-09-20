@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.8.0
+
+- `auto-fold-unfold.freeze` and `auto-fold-unfold.pause` were added. Take a look at [Commands](#commands)
+- The keybindings to `auto-fold-unfold.freeze` and `auto-fold-unfold.pause` were changed. Take a look at [Commands](#commands)
+
+## 0.8.1
+
+- For more intuitiveness, the names of the commands were changed
+- `auto-fold-unfold.onEditing.toggleBoth` was added
+- Due to overlapping keybindings, the default keybindings were changed
+
 ## 0.7.x
 
 - `auto-fold-unfold.onEdit`, `auto-fold-unfold.behaviorOnEdit` and `auto-fold-unfold.modeOnEdit` are deprecated.

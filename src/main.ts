@@ -120,10 +120,10 @@ const Main = {
 
 Main.pauseStatusBarItem.text = "Paused";
 Main.pauseStatusBarItem.tooltip = "Auto Fold & Unfold is paused";
-Main.pauseStatusBarItem.command = "auto-fold-unfold.pause";
+Main.pauseStatusBarItem.command = "auto-fold-unfold.onEditing.togglePause";
 
 Main.freezeStatusBarItem.text = "Frozen";
 Main.freezeStatusBarItem.tooltip = "Auto Fold & Unfold is frozen";
-Main.freezeStatusBarItem.command = "auto-fold-unfold.freeze";
+Main.freezeStatusBarItem.command = "auto-fold-unfold.onEditing.toggleFreeze";
 
 export default Main;
