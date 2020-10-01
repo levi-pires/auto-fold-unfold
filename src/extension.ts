@@ -3,47 +3,43 @@ import {
   commands,
   workspace,
   ExtensionContext,
-  ViewColumn,
-  Uri,
+  // ViewColumn,
+  // Uri,
+  TextEditorSelectionChangeKind,
 } from "vscode";
-import Main from "./main";
+import MainConstructor from "./main";
 import ConfigLoader from "./config-loader";
-import update from "./update";
-import { readFileSync } from "fs";
+// import update from "./update";
+// import { readFileSync } from "fs";
 
 export async function activate(context: ExtensionContext) {
+  const Main = new MainConstructor();
+
   const load = window.setStatusBarMessage(
     "$(loading) Auto Fold & Unfold: Activating Extension"
   );
 
   try {
-    await ConfigLoader.loadConfig(context.workspaceState);
+    await ConfigLoader(context.workspaceState);
   } catch (err) {
     load.dispose();
     window.showErrorMessage("The extension could not be loaded.\n" + err);
     return;
   }
 
-  update.showUpdate(
-    context,
-    "The extension was updated",
-    ["Show Me", "Don't Show Again"],
-    [() => showReleaseNote(context.extensionPath), () => {}]
-  );
-
   context.subscriptions.push(
+    commands.registerTextEditorCommand("auto-fold-unfold.foldAndClose", () => {
+      Main.fold(true);
+    }),
+
     commands.registerTextEditorCommand(
       "auto-fold-unfold.onEditing.togglePause",
-      () => {
-        Main.pause();
-      }
+      () => Main.pause()
     ),
 
     commands.registerTextEditorCommand(
       "auto-fold-unfold.onEditing.toggleFreeze",
-      () => {
-        Main.freeze();
-      }
+      () => Main.freeze()
     ),
 
     commands.registerTextEditorCommand(
@@ -70,33 +66,21 @@ export async function activate(context: ExtensionContext) {
     }),
 
     window.onDidChangeTextEditorSelection((event) => {
+      if (!window.activeTextEditor || Main.isPaused) return;
+
       const onEdit = context.workspaceState.get(
         "auto-fold-unfold.onEditing"
       ) as { enable: boolean; unfoldMode: string; foldMode: string };
 
-      if (
-        Main.isPaused ||
-        event.kind!.valueOf() == 3 ||
-        !onEdit.enable ||
-        !window.activeTextEditor ||
-        window.activeTextEditor.selection.active.compareTo(
-          window.activeTextEditor.selection.anchor
-        ) != 0
-      ) {
-        return;
-      }
+      const isLongSelection =
+        event.selections[0].active.compareTo(event.selections[0].anchor) != 0;
 
-      setTimeout(
-        Main.handle,
-        50,
-        onEdit.unfoldMode,
-        onEdit.foldMode,
-        event.textEditor.selection
-      );
-    }),
+      const isDerivedFromCommand =
+        event.kind == TextEditorSelectionChangeKind.Command;
 
-    commands.registerTextEditorCommand("auto-fold-unfold.foldAndClose", () => {
-      Main.fold(true);
+      if (isDerivedFromCommand || !onEdit.enable || isLongSelection) return;
+
+      Main.handle(onEdit.unfoldMode, onEdit.foldMode, event.selections[0]);
     }),
 
     workspace.onDidChangeConfiguration(async (event) => {
@@ -106,7 +90,7 @@ export async function activate(context: ExtensionContext) {
         );
 
         try {
-          await ConfigLoader.loadConfig(context.workspaceState);
+          await ConfigLoader(context.workspaceState);
           window.showInformationMessage(
             "All changes have been successfully applied"
           );
@@ -142,6 +126,14 @@ export async function activate(context: ExtensionContext) {
 
 export function deactivate() {}
 
+// Deactivated for now
+/*
+update.showUpdate(
+  context,
+  "The extension was updated",
+  ["Show Me", "Don't Show Again"],
+  [() => showReleaseNote(context.extensionPath), () => {}]
+);
 function showReleaseNote(extensionPath: string) {
   const panel = window.createWebviewPanel(
     "markdown.preview",
@@ -154,3 +146,4 @@ function showReleaseNote(extensionPath: string) {
   panel.iconPath = Uri.file(extensionPath + "/images/afu.png");
   panel.webview.html = readFileSync(extensionPath + "/README.html").toString();
 }
+*/

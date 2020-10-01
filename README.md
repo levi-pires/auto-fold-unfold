@@ -25,7 +25,7 @@ The version 0.8.2 of the extension contains the following improvements:
 
 - Bug fix
 
--> See [Changelog](./CHANGELOG.md)
+-> Take a look at the [Changelog](CHANGELOG.md)
 
 ## Settings
 
@@ -88,7 +88,7 @@ The version 0.8.2 of the extension contains the following improvements:
 | Command                                 | Keybinding    | Description                                                                                                             |
 | --------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | auto-fold-unfold.foldAndClose           | ctrl+shift+/  | Folds the code and closes the editor. This command is an alternative to `auto-fold-unfold.onDidChangeActiveTextEditor`. |
-| auto-fold-unfold.onEditing.toggleFreeze | ctrl+; f      | Freezes the folding functionality while Editing                                                                         |
+| auto-fold-unfold.onEditing.toggleFreeze | ctrl+; f      | Freezes the folding functionality while editing                                                                         |
 | auto-fold-unfold.onEditing.togglePause  | ctrl+; p      | Pauses the folding functionality while editing                                                                          |
 | auto-fold-unfold.onEditing.toggleBoth   | ctrl+; ctrl+; | Freezes and pauses the folding functionality while editing                                                              |
 

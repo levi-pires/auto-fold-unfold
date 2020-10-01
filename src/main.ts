@@ -7,13 +7,21 @@ import {
   StatusBarAlignment,
 } from "vscode";
 
+function foldLevels() {
+  for (let level = 7; level > 0; --level) {
+    commands.executeCommand(`editor.foldLevel${level}`);
+  }
+}
+
 function unfold(unfoldModeId: string) {
   switch (unfoldModeId) {
     case "family":
-      return commands.executeCommand("editor.unfoldRecursively");
+      commands.executeCommand("editor.unfoldRecursively");
+      break;
 
     case "parent":
-      return commands.executeCommand("editor.unfold");
+      commands.executeCommand("editor.unfold");
+      break;
 
     default:
       window.showErrorMessage(
@@ -23,72 +31,72 @@ function unfold(unfoldModeId: string) {
   }
 }
 
-const Main = {
-  isPaused: false,
+export default class Main {
+  isPaused = false;
 
-  isFrozen: false,
+  isFrozen = false;
 
-  pauseStatusBarItem: window.createStatusBarItem(StatusBarAlignment.Right, 0),
+  pauseStatusBarItem = window.createStatusBarItem(StatusBarAlignment.Right, 0);
 
-  freezeStatusBarItem: window.createStatusBarItem(StatusBarAlignment.Right, 0),
+  freezeStatusBarItem = window.createStatusBarItem(StatusBarAlignment.Right, 0);
 
-  fold: (close = false): Thenable<any> => {
-    return commands.executeCommand("editor.foldAll").then(
-      () => {
-        if (close) {
-          return commands.executeCommand("workbench.action.closeActiveEditor");
-        }
-      },
-      (reason) => console.error(reason)
-    );
-  },
+  constructor() {
+    this.pauseStatusBarItem.text = "Paused";
+    this.pauseStatusBarItem.tooltip = "Auto Fold & Unfold";
+    this.pauseStatusBarItem.command = "auto-fold-unfold.onEditing.togglePause";
+
+    this.freezeStatusBarItem.text = "Frozen";
+    this.freezeStatusBarItem.tooltip = "Auto Fold & Unfold";
+    this.freezeStatusBarItem.command =
+      "auto-fold-unfold.onEditing.toggleFreeze";
+  }
+
+  fold(close = false) {
+    commands.executeCommand("editor.foldAll").then(() => {
+      if (close) {
+        return commands.executeCommand("workbench.action.closeActiveEditor");
+      }
+    });
+  }
 
   /**
    * @param  unfoldModeId must be `parent` or `family`
    * @param  foldModeId must be `fast` or `best`
    * @param  cursorSelection the cursor position before changes
    */
-  handle: (
-    unfoldModeId: string,
-    foldModeId: string,
-    cursorSelection: Selection
-  ) => {
+  handle(unfoldModeId: string, foldModeId: string, cursorSelection: Selection) {
     switch (foldModeId) {
       case "fast":
-        let array = [];
-
-        if (!Main.isFrozen) {
-          for (let level = 7; level > 0; --level) {
-            array.push(commands.executeCommand(`editor.foldLevel${level}`));
-          }
+        if (!this.isFrozen) {
+          foldLevels();
         }
 
-        array.push(unfold(unfoldModeId));
+        unfold(unfoldModeId);
 
-        window.activeTextEditor!.revealRange(
+        window.activeTextEditor?.revealRange(
           new Range(cursorSelection.start, cursorSelection.end),
           TextEditorRevealType.InCenterIfOutsideViewport
         );
-
-        return array;
+        break;
 
       case "best":
-        if (!Main.isFrozen) {
-          return [
-            commands.executeCommand("editor.foldAll").then(() => {
-              window.activeTextEditor!.selection = cursorSelection;
+        if (!this.isFrozen) {
+          commands.executeCommand("editor.foldRecursively");
 
-              window.activeTextEditor!.revealRange(
-                new Range(cursorSelection.start, cursorSelection.end),
-                TextEditorRevealType.InCenterIfOutsideViewport
-              );
+          foldLevels();
 
-              return unfold(unfoldModeId);
-            }),
-          ];
+          window.activeTextEditor!.selection = cursorSelection;
+
+          unfold(unfoldModeId);
+
+          window.activeTextEditor?.revealRange(
+            new Range(cursorSelection.start, cursorSelection.end),
+            TextEditorRevealType.InCenterIfOutsideViewport
+          );
         } else {
-          return [unfold(unfoldModeId)];
+          unfold(unfoldModeId);
         }
+        break;
 
       default:
         window.showErrorMessage(
@@ -96,34 +104,24 @@ const Main = {
         );
         break;
     }
-  },
+  }
 
-  pause: () => {
-    if (Main.isPaused) {
-      Main.pauseStatusBarItem.hide();
+  pause() {
+    if (this.isPaused) {
+      this.pauseStatusBarItem.hide();
     } else {
-      Main.pauseStatusBarItem.show();
+      this.pauseStatusBarItem.show();
     }
-    Main.isPaused = !Main.isPaused;
-  },
+    this.isPaused = !this.isPaused;
+  }
 
-  freeze: () => {
-    if (Main.isFrozen) {
-      Main.freezeStatusBarItem.hide();
+  freeze() {
+    if (this.isFrozen) {
+      this.freezeStatusBarItem.hide();
     } else {
-      Main.freezeStatusBarItem.show();
+      this.freezeStatusBarItem.show();
     }
 
-    Main.isFrozen = !Main.isFrozen;
-  },
-};
-
-Main.pauseStatusBarItem.text = "Paused";
-Main.pauseStatusBarItem.tooltip = "Auto Fold & Unfold is paused";
-Main.pauseStatusBarItem.command = "auto-fold-unfold.onEditing.togglePause";
-
-Main.freezeStatusBarItem.text = "Frozen";
-Main.freezeStatusBarItem.tooltip = "Auto Fold & Unfold is frozen";
-Main.freezeStatusBarItem.command = "auto-fold-unfold.onEditing.toggleFreeze";
-
-export default Main;
+    this.isFrozen = !this.isFrozen;
+  }
+}

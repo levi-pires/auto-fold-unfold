@@ -8,24 +8,23 @@ function showUpdate(
   btFunction: (() => any)[],
   showAnyway = false
 ) {
-  if (!existsSync(context.globalStoragePath)) {
-    mkdirSync(context.globalStoragePath);
-  }
-
   const path = context.globalStoragePath + "/.update";
-  if (!existsSync(path)) {
-    writeFileSync(path, "{}");
-  }
 
   const { version } = JSON.parse(
     readFileSync(context.extensionPath + "/package.json").toString()
   );
 
-  const versionsDontMatch = () => {
-    return version !== JSON.parse(readFileSync(path).toString()).lastVersion;
-  };
+  if (!existsSync(context.globalStoragePath)) {
+    mkdirSync(context.globalStoragePath);
+    writeFileSync(path, "{}");
+    return;
+  }
 
-  if (versionsDontMatch() || showAnyway) {
+  const { lastVersion } = JSON.parse(readFileSync(path).toString());
+
+  const versionsDontMatch = version !== lastVersion;
+
+  if (versionsDontMatch || showAnyway) {
     window.showInformationMessage(message, ...buttons).then((value) => {
       btFunction.forEach((item, index) => {
         if (value == buttons[index]) {
