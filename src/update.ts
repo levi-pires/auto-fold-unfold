@@ -14,23 +14,15 @@ export function showUpdate(
   btFunctions: { [key: string]: (meta: UpdateMetadata) => void },
   preShowFunction: (version: string, meta: UpdateMetadata) => void = () => {}
 ) {
-  if (!existsSync(context.globalStoragePath)) {
-    mkdirSync(context.globalStoragePath);
-  }
+  let update: UpdateMetadata | undefined = context.globalState.get(
+    "update-meta"
+  );
 
-  const pathToMeta = context.globalStoragePath + "/update-meta.json";
-
-  let update: UpdateMetadata;
-
-  if (!existsSync(pathToMeta)) {
+  if (!update) {
     update = {
       lastVersion: "0",
       dontShowAgain: false,
     };
-
-    writeFileSync(pathToMeta, JSON.stringify(update));
-  } else {
-    update = JSON.parse(readFileSync(pathToMeta).toString());
   }
 
   if (update.dontShowAgain) return;
@@ -39,9 +31,9 @@ export function showUpdate(
     readFileSync(context.extensionPath + "/package.json").toString()
   ) as { version: string };
 
-  const versionsDontMatch = version != update.lastVersion;
-
   preShowFunction(version, update);
+
+  const versionsDontMatch = version != update.lastVersion;
 
   if (versionsDontMatch) {
     window.showInformationMessage(message, ...buttons).then((value) => {
@@ -49,12 +41,12 @@ export function showUpdate(
 
       const fun = btFunctions[value];
 
-      if (fun) fun(update);
+      if (fun) fun(update!);
 
-      writeFileSync(
-        pathToMeta,
-        JSON.stringify({ ...update, lastVersion: version })
-      );
+      context.globalState.update("update-meta", {
+        ...update,
+        lastVersion: version,
+      });
     });
   }
 }

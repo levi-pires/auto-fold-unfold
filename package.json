@@ -15,7 +15,7 @@
     "visualization"
   ],
   "engines": {
-    "vscode": "^1.48.0"
+    "vscode": "^1.49.0"
   },
   "categories": [
     "Visualization"
@@ -147,13 +147,12 @@
   },
   "devDependencies": {
     "@types/glob": "^7.1.1",
-    "@types/markdown-it": "^10.0.2",
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.11.0",
-    "@types/vscode": "^1.48.0",
+    "@types/vscode": "^1.49.0",
     "glob": "^7.1.6",
     "mocha": "^7.1.2",
-    "vsce": "^1.79.5",
+    "vsce": "^1.81.1",
     "vscode-test": "^1.4.0"
   },
   "dependencies": {}
