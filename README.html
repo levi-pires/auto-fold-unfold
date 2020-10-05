@@ -95,36 +95,25 @@
 </head>
 
 <body>
-  <h1 id="auto-fold-%26-unfold-for-vs-code-v0.8.1">
-    Auto Fold &amp; Unfold for VS Code v0.8.2
+  <h1 id="auto-fold-%26-unfold-for-vs-code-v0.9.0">
+    Auto Fold &amp; Unfold for VS Code v0.9.0
   </h1>
   <h2 id="release-notes">Release Notes</h2>
-  <p>The 0.8.x version of the extension contains the following improvements:</p>
-  <h3 id="0.8.2">0.8.2</h3>
-  <ul>
-    <li>Bug fix</li>
-  </ul>
-  <h3 id="0.8.1">0.8.1</h3>
-  <ul>
-    <li>For more intuitiveness, the names of the commands were changed</li>
-    <li><code>auto-fold-unfold.onEditing.toggleBoth</code> was added</li>
-    <li>
-      Due to overlapping keybindings, the default keybindings were changed
-    </li>
-  </ul>
-  <h3 id="0.8.0">0.8.0</h3>
+  <p>The version 0.9.0 of the extension contains the following improvements:</p>
   <ul>
     <li>
-      <code>auto-fold-unfold.freeze</code> and
-      <code>auto-fold-unfold.pause</code> were added. Take a look at
-      <a href="#commands">Commands</a>
+      The code was refactored. The <strong>best</strong> mode works nearly 25%
+      faster and the <strong>fast</strong> mode works 5% faster
     </li>
-    <li>
-      The keybindings to <code>auto-fold-unfold.freeze</code> and
-      <code>auto-fold-unfold.pause</code> were changed. Take a look at
-      <a href="#commands">Commands</a>
-    </li>
+    <li>Other minor improvements were made like a better update message</li>
   </ul>
+  <p>
+    -&gt; See
+    <a
+      href="https://github.com/levi-pires/auto-fold-unfold/blob/master/CHANGELOG.md"
+      >Changelog</a
+    >
+  </p>
   <h2 id="settings">Settings</h2>
   <pre><code class="hljs">{
   <span class="hljs-comment">/**
@@ -148,10 +137,10 @@
 
     <span class="hljs-comment">/**
      * Defines fold behavior while editing.
-     * If "fast", this extension will do it's job in milliseconds,
+     * If "fast", this extension will do it's job in approximately 50ms per step,
      * but the folding will be limited to the first 7 levels.
      * If "best", performance will be dictated by the level you are entering
-     * and the power of your computer, but you will experience unlimited folding.
+     * and the power of your computer (approximately 120ms per step), but you will experience unlimited folding.
      * I advise you to use the "best" setting only if your code is a tangle of objects
      * containing a 45 generation family.
      */</span>
@@ -198,7 +187,7 @@
       <tr>
         <td>auto-fold-unfold.onEditing.toggleFreeze</td>
         <td>ctrl+; f</td>
-        <td>Freezes the folding functionality while editing</td>
+        <td>Freezes the folding functionality while Editing</td>
       </tr>
       <tr>
         <td>auto-fold-unfold.onEditing.togglePause</td>

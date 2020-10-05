@@ -4,7 +4,7 @@
   "description": "Auto fold and unfold to visually manage the code size.",
   "publisher": "levipires",
   "license": "MIT",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "keywords": [
     "auto",
     "fold",
@@ -49,7 +49,7 @@
               ],
               "enumDescriptions": [
                 "has a limit of 7 levels",
-                "doesn't have limits but is way slower"
+                "doesn't have limits but is slower"
               ]
             },
             "unfoldMode": {

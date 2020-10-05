@@ -3,13 +3,11 @@ import {
   commands,
   workspace,
   ExtensionContext,
-  ViewColumn,
-  Uri,
+  TextEditorSelectionChangeKind,
 } from "vscode";
 import Main from "./main";
-import ConfigLoader from "./config-loader";
-import update from "./update";
-import { readFileSync } from "fs";
+import * as ConfigLoader from "./config-loader";
+import * as Update from "./update";
 
 export async function activate(context: ExtensionContext) {
   const load = window.setStatusBarMessage(
@@ -24,26 +22,27 @@ export async function activate(context: ExtensionContext) {
     return;
   }
 
-  update.showUpdate(
+  Update.showUpdate(
     context,
     "The extension was updated",
-    ["Show Me", "Don't Show Again"],
-    [() => showReleaseNote(context.extensionPath), () => {}]
+    ["Show Me", "Don't Show Again", "Never Show This Again"],
+    {
+      "Show Me": () => Update.showReleaseNote(context.extensionPath),
+      "Never Show This Again": (meta) => {
+        meta.dontShowAgain = true;
+      },
+    }
   );
 
   context.subscriptions.push(
     commands.registerTextEditorCommand(
       "auto-fold-unfold.onEditing.togglePause",
-      () => {
-        Main.pause();
-      }
+      Main.pause
     ),
 
     commands.registerTextEditorCommand(
       "auto-fold-unfold.onEditing.toggleFreeze",
-      () => {
-        Main.freeze();
-      }
+      Main.freeze
     ),
 
     commands.registerTextEditorCommand(
@@ -53,6 +52,10 @@ export async function activate(context: ExtensionContext) {
         Main.pause();
       }
     ),
+
+    commands.registerTextEditorCommand("auto-fold-unfold.foldAndClose", () => {
+      Main.fold(true);
+    }),
 
     window.onDidChangeActiveTextEditor(() => {
       if (
@@ -70,33 +73,28 @@ export async function activate(context: ExtensionContext) {
     }),
 
     window.onDidChangeTextEditorSelection((event) => {
+      if (!window.activeTextEditor || Main.isPaused) return;
+
       const onEdit = context.workspaceState.get(
         "auto-fold-unfold.onEditing"
       ) as { enable: boolean; unfoldMode: string; foldMode: string };
 
-      if (
-        Main.isPaused ||
-        event.kind!.valueOf() == 3 ||
-        !onEdit.enable ||
-        !window.activeTextEditor ||
-        window.activeTextEditor.selection.active.compareTo(
-          window.activeTextEditor.selection.anchor
-        ) != 0
-      ) {
-        return;
-      }
+      const isDerivedFromUserCommand =
+        event.kind == TextEditorSelectionChangeKind.Command;
 
-      setTimeout(
-        Main.handle,
-        50,
+      const filteredSelections = event.selections.filter(
+        (item) => item.active.compareTo(item.anchor) != 0
+      );
+
+      const isLongSelection = filteredSelections.length > 0;
+
+      if (isDerivedFromUserCommand || !onEdit.enable || isLongSelection) return;
+
+      Main.handle(
         onEdit.unfoldMode,
         onEdit.foldMode,
-        event.textEditor.selection
+        event.textEditor.selections
       );
-    }),
-
-    commands.registerTextEditorCommand("auto-fold-unfold.foldAndClose", () => {
-      Main.fold(true);
     }),
 
     workspace.onDidChangeConfiguration(async (event) => {
@@ -141,16 +139,3 @@ export async function activate(context: ExtensionContext) {
 }
 
 export function deactivate() {}
-
-function showReleaseNote(extensionPath: string) {
-  const panel = window.createWebviewPanel(
-    "markdown.preview",
-    "Auto Fold & Unfold",
-    {
-      viewColumn: ViewColumn.One,
-      preserveFocus: true,
-    }
-  );
-  panel.iconPath = Uri.file(extensionPath + "/images/afu.png");
-  panel.webview.html = readFileSync(extensionPath + "/README.html").toString();
-}

@@ -1,4 +1,4 @@
-# Auto Fold & Unfold for VS Code v0.8.2
+# Auto Fold & Unfold for VS Code v0.9.0
 
 This extension is under construction. Auto F&U automatically folds and unfolds when the cursor enters or leaves the function.
 
@@ -21,11 +21,12 @@ And now, if you are using version 0.4.0 or higher, you can use this same magic w
 
 ## Release Notes
 
-The version 0.8.2 of the extension contains the following improvements:
+The version 0.9.0 of the extension contains the following improvements:
 
-- Bug fix
+- The code was refactored. The **best** mode works nearly 25% faster and the **fast** mode works 5% faster
+- Other minor improvements were made like a better update message
 
--> See [Changelog](./CHANGELOG.md)
+-> See [Changelog](/CHANGELOG.md)
 
 ## Settings
 
@@ -52,10 +53,10 @@ The version 0.8.2 of the extension contains the following improvements:
 
     /**
      * Defines fold behavior while editing.
-     * If "fast", this extension will do it's job in milliseconds,
+     * If "fast", this extension will do it's job in approximately 50ms per step,
      * but the folding will be limited to the first 7 levels.
      * If "best", performance will be dictated by the level you are entering
-     * and the power of your computer, but you will experience unlimited folding.
+     * and the power of your computer (approximately 120ms per step), but you will experience unlimited folding.
      * I advise you to use the "best" setting only if your code is a tangle of objects
      * containing a 45 generation family.
      */

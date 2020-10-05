@@ -1,19 +1,20 @@
-import {
-  commands,
-  window,
-  Range,
-  Selection,
-  TextEditorRevealType,
-  StatusBarAlignment,
-} from "vscode";
+import { commands, window, Selection, StatusBarAlignment } from "vscode";
+
+async function foldLevels() {
+  for (let level = 7; level > 0; --level) {
+    commands.executeCommand(`editor.foldLevel${level}`);
+  }
+}
 
 function unfold(unfoldModeId: string) {
   switch (unfoldModeId) {
     case "family":
-      return commands.executeCommand("editor.unfoldRecursively");
+      commands.executeCommand("editor.unfoldRecursively");
+      break;
 
     case "parent":
-      return commands.executeCommand("editor.unfold");
+      commands.executeCommand("editor.unfold");
+      break;
 
     default:
       window.showErrorMessage(
@@ -32,11 +33,11 @@ const Main = {
 
   freezeStatusBarItem: window.createStatusBarItem(StatusBarAlignment.Right, 0),
 
-  fold: (close = false): Thenable<any> => {
-    return commands.executeCommand("editor.foldAll").then(
+  fold: (close = false) => {
+    commands.executeCommand("editor.foldAll").then(
       () => {
         if (close) {
-          return commands.executeCommand("workbench.action.closeActiveEditor");
+          commands.executeCommand("workbench.action.closeActiveEditor");
         }
       },
       (reason) => console.error(reason)
@@ -51,44 +52,30 @@ const Main = {
   handle: (
     unfoldModeId: string,
     foldModeId: string,
-    cursorSelection: Selection
+    selections: Selection[]
   ) => {
     switch (foldModeId) {
       case "fast":
-        let array = [];
-
         if (!Main.isFrozen) {
-          for (let level = 7; level > 0; --level) {
-            array.push(commands.executeCommand(`editor.foldLevel${level}`));
-          }
+          foldLevels();
         }
-
-        array.push(unfold(unfoldModeId));
-
-        window.activeTextEditor!.revealRange(
-          new Range(cursorSelection.start, cursorSelection.end),
-          TextEditorRevealType.InCenterIfOutsideViewport
-        );
-
-        return array;
+        unfold(unfoldModeId);
+        break;
 
       case "best":
         if (!Main.isFrozen) {
-          return [
-            commands.executeCommand("editor.foldAll").then(() => {
-              window.activeTextEditor!.selection = cursorSelection;
+          commands.executeCommand("editor.foldRecursively").then(() => {
+            foldLevels();
 
-              window.activeTextEditor!.revealRange(
-                new Range(cursorSelection.start, cursorSelection.end),
-                TextEditorRevealType.InCenterIfOutsideViewport
-              );
+            if (window.activeTextEditor!.selections != selections)
+              window.activeTextEditor!.selections = selections;
 
-              return unfold(unfoldModeId);
-            }),
-          ];
+            unfold(unfoldModeId);
+          });
         } else {
-          return [unfold(unfoldModeId)];
+          unfold(unfoldModeId);
         }
+        break;
 
       default:
         window.showErrorMessage(

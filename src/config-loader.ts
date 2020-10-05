@@ -13,7 +13,7 @@ function get<T>(item: string, returnOnUndef: T) {
   return pickedUpItem as T;
 }
 
-async function loadConfig(memento: Memento) {
+export async function loadConfig(memento: Memento) {
   try {
     await memento.update(
       "auto-fold-unfold.onEditing",
@@ -40,5 +40,3 @@ async function loadConfig(memento: Memento) {
     throw err;
   }
 }
-
-export default { loadConfig };
